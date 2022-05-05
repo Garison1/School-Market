@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*- 
-import sys
-sys.path
-sys.path.append('D:\\Дима\\Програмирование\\Python\\BOT')
+# -*- coding: utf-8 -*-
 import mysql.connector
 import telebot
 import random
-import logging
 import base64
 import datetime
+from time import sleep
 from datetime import timedelta
 from telebot import types
 
@@ -18,8 +15,8 @@ ww = {}
 
 count_er = 0
 io = ''
-    
-db = mysql.connector.connect(host="localhost", user="garison", password="drowssap", database="test")
+
+db = mysql.connector.connect(host="localhost", user="user", database="test")
 cursor = db.cursor()
 
 qw = "SELECT distinct `user id` FROM `users` "
@@ -32,11 +29,15 @@ for i in result:
     r = cursor.fetchall()
     for a in r:
         users[chat_id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nickname': a[0], 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-        buy_users[chat_id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-        counters[chat_id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+        buy_users[chat_id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+        counters[chat_id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
         ww[chat_id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
-    
+
 token = '639065045:AAG1TpgP3I0ssDpj2me9_GVNWZn3Nm5z55w'
+
+#  853915823:AAGR8hGmpFRJyz3APrDNgAsv8y26J7grcB8
+#  713767300:AAEo292P4kjpqU3OtUWhV1cxTzIGVTvqp-U
+
 bot = telebot.TeleBot(token, threaded=False)
 
 def code(s):
@@ -58,7 +59,7 @@ def isint(s):
 
 @bot.message_handler(commands=['rating'])
 def trusted(message):
-    MESSAGE = '\nP.S. объявления стоимостью меньше 2🍆 не оцениваются.'
+    MESSAGE = '\nP.S. объявления стоимостью меньше 1🍆 не оцениваются.'
     num = 1
     qw = "SELECT `nickname` FROM `personal` WHERE `nickname` <> '' and `stars` <> 0 ORDER BY `stars`, `N`"
     cursor.execute(qw)
@@ -88,7 +89,7 @@ def trusted(message):
             num += 1
     bot.reply_to(message, MESSAGE)
     num = 1
-    
+
 @bot.message_handler(commands=['reliable'])
 def trusted(message):
     num = 0
@@ -100,12 +101,12 @@ def trusted(message):
         for i in result:
             num += 1
             MESSAGE = MESSAGE + '\n' + str(num) + ') ' + str(txt(i[0]))
-        bot.send_message(message.chat.id, MESSAGE + ' \n\nP.S. Все кто в этом списке имеют неограниченный доступ к объявлениям. Если вы хотите попасть в этот список, напишите мне —> @RL_support_Bot')
+        bot.send_message(message.chat.id, MESSAGE + ' \n\nP.S. Все кто в этом списке имеют доступ ко всем объявлениям БЕСПЛАТНО. Если вы хотите попасть в этот список, напишите мне —> @RL_support_Bot')
 
 @bot.message_handler(commands=['donate'])
 def send_wel(message):
-    bot.reply_to(message, "Донат от 5 грн у человека, который описан в пополнении счета.")
-    
+    bot.reply_to(message, "Донат у человека который описан в пополнении счета. Все собранные средстра пойдут на ускорение работы бота ( сервера ведь не бесплатные ) ")
+
 @bot.message_handler(commands=['act'])
 def send_welcom(message):
     if message.chat.id == 562050144 or message.chat.id == 653376416:
@@ -131,10 +132,10 @@ def send_welcom(message):
                 bot.send_message(message.chat.id, "Да здравствует повелитель!",reply_markup=key)
     else:
         bot.send_message(message.chat.id, "Вы не администратор😜")
-            
+
 @bot.message_handler(commands=['help'])
 def send_welcom(message):
-    bot.reply_to(message, "Все вопросы на —> @Rl_support_Bot\n\nP.S. Бот находится в стадии BETA тестирования, воши отзывы могут помочь в дальнейшем развитии.")
+    bot.reply_to(message, "Педставляю вашему вниманию обновлённую версию бота. Можете выкладывать сюда всякую инфу в виде картинок и иметь к ней доступ с любого устройства.\n    Нзначив цену в 0🍆,  к объявлению получат доступ все пользователи бота. Если же вы обладатель особо ценной информации можете продать ее по дороже. \n    Тут все объявления тщательно отсортированы, они к вашим услугам в любой момент.\n\nP.S. Создатели бота не получают финансовой выгоды. Все вложенные деньги остаются внутри бота и 🍆  всегда можно обналичить, как это сделать описано во вкладке <пополнить счет>.\n\nВсе вопросы на —> @Rl_support_Bot.")
 
 @bot.message_handler(commands=["start"])
 def keyboard(message):
@@ -143,22 +144,22 @@ def keyboard(message):
     result = cursor.fetchall()
     if len(result) == 0:
         if message.chat.id not in users.keys():
-            
+
             users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-            buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-        
+            buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+
         if message.chat.id in users.keys():
             users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-            buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-            
+            buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+
             cur = datetime.datetime.now()
-            a = datetime.timedelta(hours=6)
+            a = datetime.timedelta(hours=7)
             cur += a
             qw = """INSERT INTO `test`.`users` (`id`, `user id`, `subject`, `class`, `date`, `note`, `file_path`, `price`, `balance`, `nickname`) VALUES( NULL, '%s', '%s',' %s', '%s', '%s', '%s', %d, %d, '%s')""" %(message.chat.id,users[message.chat.id]['subject'],users[message.chat.id]['class'], cur.strftime('%Y-%m-%d-%H-%M'),users[message.chat.id]['note'],'',users[message.chat.id]['price'],0,'')
             cursor.execute(qw)
             db.commit()
-            
-            counters[message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+
+            counters[message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
             ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
             counters[message.chat.id]['call'] = ''
             counters[message.chat.id]['ids'] = ''
@@ -175,14 +176,14 @@ def keyboard(message):
             counters[message.chat.id]['cac'] = 0
             counters[message.chat.id]['czc'] = 0
             counters[message.chat.id]['cjc'] = 0
-            
+
             bot.send_document(message.chat.id, 'https://i.pinimg.com/originals/7d/9b/1d/7d9b1d662b28cd365b33a01a3d0288e1.gif')
             users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'nickname': '', 'noname': ''}
-            buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+            buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
 
         if message.chat.id in users.keys():
             users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '','file': [], 'price': 0, 'nickname': '', 'noname': ''}
-            buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+            buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
             ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
             users[message.chat.id]['nickname'] = result
             key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
@@ -192,45 +193,61 @@ def keyboard(message):
 
     else:
         users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-        buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+        buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
         ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
         users[message.chat.id]['nickname'] = result[0]
         key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        key.row("продать", "купить")
+        key.row("продать", "мои объявления", "купить")
         key.row("пополнить счет", "баланс")
         bot.send_message(message.chat.id, "Управляйте ботом с помощью кнопок",reply_markup=key)
-        
+
 @bot.message_handler(func=lambda c:True, content_types=['text'])
 def info_message(message):
-    msg = message.text.lower() 
+    msg = message.text.lower()
     nores = 0
     global count_er
     if message.chat.id not in users.keys() or message.chat.id not in buy_users.keys() or message.chat.id not in ww.keys() or message.chat.id not in counters.keys():
-        
+
         qw = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s and `nickname` <> ''" %(message.chat.id)
         cursor.execute(qw)
         result = cursor.fetchall()
         result = txt(result)
-        
+
         if len(result) != 0:
             users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nickname': result[0], 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-            buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-            counters[message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+            buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+            counters[message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
             ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
         else:
             users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nickname': '', 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-            buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-            counters[message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+            buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+            counters[message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
             ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
-   
 
-    qw = "SELECT `ban` FROM `personal` WHERE `user id` = %s" %(str(message.chat.id)) 
+            qv = "SELECT `id` FROM `users` WHERE `user id` = '%s'" %(str(message.chat.id))
+            cursor.execute(qv)
+            result = cursor.fetchall()
+            if len(result) == 0:
+                cur = datetime.datetime.now()
+                a = datetime.timedelta(hours=7)
+                cur += a
+                qw = """INSERT INTO `test`.`users` (`id`, `user id`, `subject`, `class`, `date`, `note`, `file_path`, `price`, `balance`, `nickname`) VALUES( NULL, '%s', '%s',' %s', '%s', '%s', '%s', %d, %d, '%s')""" %(message.chat.id,users[message.chat.id]['subject'],users[message.chat.id]['class'], cur.strftime('%Y-%m-%d-%H-%M'),users[message.chat.id]['note'],'',users[message.chat.id]['price'],0,'')
+                cursor.execute(qw)
+                db.commit()
+
+    if message.text == 'сикрет' and message.chat.id == 653376416:
+        qw = "UPDATE `test`.`personal` SET `ban` = '0' WHERE `personal`.`user id` = 653376416"
+        cursor.execute(qw)
+        db.commit()
+        bot.send_message(653376416, 'Вы свободны!')
+
+    qw = "SELECT `ban` FROM `personal` WHERE `user id` = %s" %(str(message.chat.id))
     cursor.execute(qw)
     result = cursor.fetchall()
     if len(result) == 0:
         nores = 1
     if nores == 1 or nores == 0 and result[0][0] == 0:
-        
+
         qw = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s and nickname <> ''" %(str(message.chat.id))
         cursor.execute(qw)
         ww[message.chat.id]['result'] = cursor.fetchall()
@@ -244,23 +261,23 @@ def info_message(message):
 
         if msg == 'завершить чат':
             if users[message.chat.id]['chat'] != 0:
-                
+
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                key.row("продать", "купить")
+                key.row("продать", "мои объявления", "купить")
                 key.row("пополнить счет", "баланс")
                 bot.send_message(message.chat.id, 'Чат завершен.',reply_markup=key)
-                
+
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                key.row("продать", "купить")
+                key.row("продать", "мои объявления", "купить")
                 key.row("пополнить счет", "баланс")
                 bot.send_message(users[message.chat.id]['chat'], 'Чат завершен.' ,reply_markup=key)
 
                 users[users[message.chat.id]['chat']]['chat'] = 0
                 users[message.chat.id]['chat'] = 0
-        
-        
+
+
         if msg == 'отмена':
-            
+
             count_er = 0
             counters[message.chat.id]['cjc'] = 0
             counters[message.chat.id]['count'] = 0
@@ -274,22 +291,23 @@ def info_message(message):
             counters[message.chat.id]['czc'] = 0
             users[message.chat.id]['nicou'] = 0
             counters[message.chat.id]['count_3'] = 0
+            counters[message.chat.id]['count_4'] = 0
 
-            buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+            buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
 
             if users[message.chat.id]['noname'] == 1:
                 users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'nickname': users[message.chat.id]['nickname'], 'noname': 1}
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
                 key.row("продать", "купить")
                 key.row("пополнить счет", "регистрация", "баланс")
-                bot.send_message(message.chat.id, 'Успешно отменено!',reply_markup=key) 
+                bot.send_message(message.chat.id, 'Успешно отменено!',reply_markup=key)
 
             if users[message.chat.id]['noname'] == 0:
                 users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'nickname': users[message.chat.id]['nickname'], 'noname': 0}
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                key.row("продать", "купить")
+                key.row("продать", "мои объявления", "купить")
                 key.row("пополнить счет", "баланс")
-                bot.send_message(message.chat.id, 'Успешно отменено!',reply_markup=key) 
+                bot.send_message(message.chat.id, 'Успешно отменено!',reply_markup=key)
 
         if users[message.chat.id]['nicou'] == 1:
             users[message.chat.id]['nickname'] = message.text
@@ -300,7 +318,7 @@ def info_message(message):
                 srt = txt(i[0])
                 if users[message.chat.id]['nickname'].lower() == srt.lower():
                     ww[message.chat.id]['b'] = 1
-                    bot.send_message(message.chat.id, "Такой ник уже занят! Введите другой:")  
+                    bot.send_message(message.chat.id, "Такой ник уже занят! Введите другой:")
                 else:
                     ww[message.chat.id]['b'] = 0
 
@@ -320,16 +338,14 @@ def info_message(message):
                 db.commit()
 
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                key.row("продать", "купить")
+                key.row("продать", "мои объявления", "купить")
                 key.row("пополнить счет", "баланс")
-                bot.send_message(message.chat.id, 'Nickname  "' + str(users[message.chat.id]['nickname']) + '"  успешно добавлен! Если вы хотите его изменить, напишите мне —> @Rl_support_Bot',reply_markup=key) 
+                bot.send_message(message.chat.id, 'Nickname  "' + str(users[message.chat.id]['nickname']) + '"  успешно добавлен! Если вы хотите его изменить, напишите мне —> @Rl_support_Bot\n\nЧто бы избежать мошенников покупайте только у продавцов с хорошим рейтингом /rating ( рейтинг есть только у тех продавцов, у которых есть продажи от 1🍆 ) или у тех кому доверяете /reliable. Мы не несем ответственности за ваши действия, техподдержка —> @RL_support_Bot',reply_markup=key)
                 users[message.chat.id]['nicou'] = 0
-                
-                
-                
-                
-        if users[message.chat.id]['ban'] == 1 and message.chat.id == 653376416 and msg != 'отмена' or users[message.chat.id]['ban'] == 1 and message.chat.id == 684759645 and msg != 'отмена':
-            qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.text)) 
+
+
+        if users[message.chat.id]['ban'] == 1 and message.chat.id == 653376416 and msg != 'отмена' or users[message.chat.id]['ban'] == 1 and message.chat.id == 562050144 and msg != 'отмена':
+            qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.text))
             cursor.execute(qw)
             result = cursor.fetchall()
             if len(result) != 0:
@@ -341,13 +357,13 @@ def info_message(message):
             else:
                 bot.send_message(message.chat.id, 'Такого пользователя не существует! Повторите ввод:')
 
-        if message.text == 'бан' and message.chat.id == 653376416 or message.text == 'бан' and message.chat.id == 684759645:
+        if message.text == 'бан' and message.chat.id == 653376416 or message.text == 'бан' and message.chat.id == 562050144:
             bot.send_message(message.chat.id, 'Кого забанить? (id)')
             users[message.chat.id]['ban'] = 1
 
-        if users[message.chat.id]['free'] == 1 and message.chat.id == 653376416 or users[message.chat.id]['free'] == 1 and message.chat.id == 684759645:
+        if users[message.chat.id]['free'] == 1 and message.chat.id == 653376416 or users[message.chat.id]['free'] == 1 and message.chat.id == 562050144:
 
-            qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.text)) 
+            qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.text))
             cursor.execute(qw)
             result = cursor.fetchall()
             if len(result) != 0:
@@ -361,16 +377,12 @@ def info_message(message):
             else:
                 bot.send_message(message.chat.id, 'Такого пользователя не существует! Повторите ввод:')
 
-        if message.text == 'воля' and message.chat.id == 653376416 or message.text == 'воля' and message.chat.id == 684759645:
+        if message.text == 'воля' and message.chat.id == 653376416 or message.text == 'воля' and message.chat.id == 562050144:
             bot.send_message(message.chat.id, 'Кого освободить? (id)')
             users[message.chat.id]['free'] = 1
 
-                
-                
-                
-
         if counters[message.chat.id]['count_3'] == 3:
-            qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.text)) 
+            qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.text))
             cursor.execute(qw)
             ww[message.chat.id]['result'] = cursor.fetchall()
             if len(ww[message.chat.id]['result']) != 0:
@@ -382,9 +394,9 @@ def info_message(message):
                 counters[message.chat.id]['count_3'] = 0
             else:
                 bot.send_message(message.chat.id, 'Такого юзера не существует! Повторите ввод:')
-                
+
         if counters[message.chat.id]['count_3'] == 1:
-            qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.text)) 
+            qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.text))
             cursor.execute(qw)
             ww[message.chat.id]['result'] = cursor.fetchall()
             if len(ww[message.chat.id]['result']) != 0:
@@ -396,7 +408,7 @@ def info_message(message):
                 counters[message.chat.id]['count_3'] = 0
             else:
                 bot.send_message(message.chat.id, 'Такого юзера не существует! Повторите ввод:')
-        
+
         global io
         if count_er == 1:
             nkb = 0
@@ -417,7 +429,7 @@ def info_message(message):
                         break
                     else:
                         nkb = 1
-                if nkb == 1:        
+                if nkb == 1:
                     qw = """UPDATE `users` SET `nickname` = '%s' WHERE `user id` = '%s' """ %(code(message.text), resultat[0][0])
                     cursor.execute(qw)
                     db.commit()
@@ -432,10 +444,10 @@ def info_message(message):
                     nkb = 0
             else:
                 bot.send_message(message.chat.id, 'Такого юзера не существует, повторите ввод:')
-        
-        if msg == 'переименовать' and message.chat.id == 653376416:
-                
-            qw = "SELECT `nickname` FROM `personal`" 
+
+        if msg == 'переименовать' and message.chat.id == 653376416 or msg == 'переименовать' and message.chat.id == 562050144:
+
+            qw = "SELECT `nickname` FROM `personal`"
             cursor.execute(qw)
             ww[message.chat.id]['result'] = cursor.fetchall()
             buttons = []
@@ -443,17 +455,17 @@ def info_message(message):
             for i in ww[message.chat.id]['result']:
                 buttons.append(types.InlineKeyboardButton(text = txt(i[0]), callback_data = '!' + i[0]))
                 key.add(buttons[-1])
-            bot.send_message(message.chat.id, 'Переименовать:', reply_markup = key) 
-        
+            bot.send_message(message.chat.id, 'Переименовать:', reply_markup = key)
+
         if msg == 'доверие' and message.chat.id == 653376416:
             bot.send_message(message.chat.id, 'Доверенный пользователь получит неограниченный доступ к домашним заданиям!\n\nКому дать доверенность(id):')
             counters[message.chat.id]['count_3'] = 1
-            
+
         if msg == 'недоверие' and message.chat.id == 653376416:
             bot.send_message(message.chat.id, 'У кого забрать доверие(id):')
             counters[message.chat.id]['count_3'] = 3
-            
-        if msg == 'регистрация' and users[message.chat.id]['nicou'] == 0:  
+
+        if msg == 'регистрация' and users[message.chat.id]['nicou'] == 0:
             if users[message.chat.id]['noname'] == 1:
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
                 key.row("отмена")
@@ -462,43 +474,43 @@ def info_message(message):
             if users[message.chat.id]['noname'] == 0:
                 bot.send_message(message.chat.id, 'Вы уже зарегистрированы!')
 
-        if counters[message.chat.id]['csc'] == 1:   
+        if counters[message.chat.id]['csc'] == 1:
             note = message.text
             if len(note) < 3:
-                bot.send_message(message.chat.id, 'Коментарий слишком короткий, повторите ввод:')
+                bot.send_message(message.chat.id, 'Описание слишком короткое, повторите ввод:')
             if len(note) > 100:
-                bot.send_message(message.chat.id, 'Коментарий слишком длинный, повторите ввод:')
+                bot.send_message(message.chat.id, 'Описание слишком длинное, повторите ввод:')
             if len(note) <= 100 and len(note) >= 3:
                 note = message.text
                 users[message.chat.id]['note'] = str(note)
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
                 key.row('готово', 'отмена')
-                bot.send_message(message.chat.id, 'Отлично! Назначьте цену🍆:',reply_markup=key) 
+                bot.send_message(message.chat.id, 'Отлично! Назначьте цену🍆:',reply_markup=key)
                 counters[message.chat.id]['zwz'] = 1
                 counters[message.chat.id]['csc'] = 0
         # Вывод средств
-        if msg == 'гривны' and message.chat.id == 653376416 or msg == 'гривны' and message.chat.id == 684759645 or msg == 'гривны' and message.chat.id == 562050144:
+        if msg == 'гривны' and message.chat.id == 653376416 or msg == 'гривны' and message.chat.id == 562050144:
             counters[message.chat.id]['uqu'] = 1
-        if message.chat.id == 653376416 and counters[message.chat.id]['uqu'] == 1 or message.chat.id == 684759645 and counters[message.chat.id]['uqu'] == 1:
+        if message.chat.id == 653376416 and counters[message.chat.id]['uqu'] == 1 or message.chat.id == 562050144 and counters[message.chat.id]['uqu'] == 1:
 
             if counters[message.chat.id]['cjc'] == 1:
                 gr = message.text
                 if gr.isdigit() == False:
                     bot.send_message(message.chat.id, 'Сумма введена не корректно, повторите ввод:')
-                if gr.isdigit() == True:   
-                    qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(str(counters[message.chat.id]['idz'])) 
+                if gr.isdigit() == True:
+                    qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(str(counters[message.chat.id]['idz']))
                     cursor.execute(qw)
                     ww[message.chat.id]['result'] = cursor.fetchall()
                     if len(ww[message.chat.id]['result']) != 0:
                         old0bal = ww[message.chat.id]['result'][0][0]
                         owo = int(gr)
-                        vivod = owo / 5
+                        vivod = owo / 10
                         if old0bal >= owo:
-                            owo = old0bal - owo  
-                            qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(owo, str(counters[message.chat.id]['idz']))   
+                            owo = old0bal - owo
+                            qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(owo, str(counters[message.chat.id]['idz']))
                             cursor.execute(qw)
                             db.commit()
-                            bot.send_message(message.chat.id, 'Вы вывели ' + str(vivod) + ' грн!') 
+                            bot.send_message(message.chat.id, 'Вы вывели ' + str(vivod) + ' грн!')
                             owo = 0
                             vivod = 0
                             counters[message.chat.id]['cjc'] = 0
@@ -511,7 +523,7 @@ def info_message(message):
                         bot.send_message(message.chat.id, 'Такого юзера не существует!')
 
             m = message.text
-            if counters[message.chat.id]['cac'] == 1:   
+            if counters[message.chat.id]['cac'] == 1:
                 if len(m) != 9:
                     bot.send_message(message.chat.id, 'Не корректный id, повторите ввод:')
                 if len(m) == 9:
@@ -519,7 +531,7 @@ def info_message(message):
                         bot.send_message(message.chat.id, 'id введен не корректно, повторите ввод:')
                     if m.isdigit() == True:
                         counters[message.chat.id]['idz'] = message.text
-                        qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(str(counters[message.chat.id]['idz'])) 
+                        qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(str(counters[message.chat.id]['idz']))
                         cursor.execute(qw)
                         ww[message.chat.id]['result'] = cursor.fetchall()
                         if len(ww[message.chat.id]['result']) != 0:
@@ -529,31 +541,57 @@ def info_message(message):
                         else:
                             bot.send_message(message.chat.id, 'Такого юзера не существует!')
 
-            if message.text == 'гривны' and counters[message.chat.id]['cac'] == 0:  
-                bot.send_message(message.chat.id, 'id пользователя:') 
+            if message.text == 'гривны' and counters[message.chat.id]['cac'] == 0:
+                bot.send_message(message.chat.id, 'id пользователя:')
                 counters[message.chat.id]['cac'] = 1
-              
-        if msg == 'начать чат' and message.chat.id == 653376416:
-            
-            message_to_users = message.text
-            qw = "SELECT `nickname` FROM `personal`" 
+
+        if counters[message.chat.id]['count_4'] == 1:
+
+            qw = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s" % (str(message.chat.id))
             cursor.execute(qw)
             ww[message.chat.id]['result'] = cursor.fetchall()
-            
+
+            key = types.InlineKeyboardMarkup()
+            but_1 = types.InlineKeyboardButton(text="Принять", callback_data = str(message.chat.id) + "accept")
+            but_2 = types.InlineKeyboardButton(text="Отклонить", callback_data = str(message.chat.id) + "cancel")
+            key.add(but_1, but_2)
+            bot.send_message(562050144, "Заявка на пополнение счета:\n" + str(message.chat.id) + "   "  + txt(str(ww[message.chat.id]['result'][0][0])) + "\n" + str(message.text), reply_markup=key)
+
+            key = types.InlineKeyboardMarkup()
+            but_1 = types.InlineKeyboardButton(text="Принять", callback_data = str(message.chat.id) + "accept")
+            but_2 = types.InlineKeyboardButton(text="Отклонить", callback_data = str(message.chat.id) + "cancel")
+            key.add(but_1, but_2)
+            bot.send_message(653376416, "Заявка на пополнение счета:\n" + str(message.chat.id) + "   "  + txt(str(ww[message.chat.id]['result'][0][0])) + "\n" + str(message.text), reply_markup=key)
+
+            key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+            key.row("продать", "мои объявления", "купить")
+            key.row("пополнить счет", "баланс")
+            bot.send_message(message.chat.id, 'Заявка на пополнение счета подана!',reply_markup = key)
+
+            counters[message.chat.id]['count_4'] = 0
+
+
+
+        if msg == 'начать чат' and message.chat.id == 653376416:
+            message_to_users = message.text
+            qw = "SELECT `nickname` FROM `personal`"
+            cursor.execute(qw)
+            ww[message.chat.id]['result'] = cursor.fetchall()
+
             buttons = []
-            
+
             key = types.InlineKeyboardMarkup()
             for i in ww[message.chat.id]['result']:
                 buttons.append(types.InlineKeyboardButton(text = txt(i[0]), callback_data = i[0]))
                 key.add(buttons[-1])
-            bot.send_message(message.chat.id, 'Начать чат с:', reply_markup = key) 
-            
+            bot.send_message(message.chat.id, 'Начать чат с:', reply_markup = key)
+
         if users[message.chat.id]['chat'] != 0:
             bot.send_message(int(users[message.chat.id]['chat']), message.text)
-              
+
         if counters[message.chat.id]['count'] == 1 and msg != 'отмена':
             message_to_users = message.text
-            qw = "SELECT distinct `user id` FROM `users`" 
+            qw = "SELECT distinct `user id` FROM `users`"
             cursor.execute(qw)
             ww[message.chat.id]['result'] = cursor.fetchall()
             for i in ww[message.chat.id]['result']:
@@ -561,30 +599,28 @@ def info_message(message):
             bot.reply_to(message, 'Сообщение безвозвратно отправлено!')
             counters[message.chat.id]['count'] = 0
 
-                
-        if msg == 'рассылка' and message.chat.id == 653376416 or msg == 'рассылка' and message.chat.id == 684759645:
+        if msg == 'рассылка' and message.chat.id == 653376416:
             bot.send_message(message.chat.id, "Введите сообщение которое будет отправленно всем пользователям бота:")
             counters[message.chat.id]['count'] = 1
 
         # пополнить счет🍆
-        if msg == 'овощи' and message.chat.id == 653376416 or msg == 'овощи' and message.chat.id == 684759645 or msg == 'овощи' and message.chat.id == 562050144:
+        if msg == 'овощи' and message.chat.id == 653376416 or msg == 'овощи' and message.chat.id == 562050144:
             counters[message.chat.id]['uou'] = 1
-        if message.chat.id == 653376416 and counters[message.chat.id]['uou'] == 1 or message.chat.id == 684759645 and counters[message.chat.id]['uou'] == 1:
-
+        if message.chat.id == 653376416 and counters[message.chat.id]['uou'] == 1 or message.chat.id == 562050144 and counters[message.chat.id]['uou'] == 1:
             if counters[message.chat.id]['czc'] == 1:
                 grn = message.text
                 if grn.isdigit() == False:
                     bot.send_message(message.chat.id, 'Сумма введена не корректно, повторите ввод:')
                 if grn.isdigit() == True:
-                    qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(counters[message.chat.id]['ids']) 
+                    qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(counters[message.chat.id]['ids'])
                     cursor.execute(qw)
                     ww[message.chat.id]['result'] = cursor.fetchall()
                     oldbal = ww[message.chat.id]['result'][0][0]
-                    ovo = int(grn) * 5
+                    ovo = int(grn) * 10
                     wow = ovo
                     ovo = ovo + oldbal
-                    if len(ww[message.chat.id]['result']) != 0:        
-                        qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(ovo, str(counters[message.chat.id]['ids']))   
+                    if len(ww[message.chat.id]['result']) != 0:
+                        qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(ovo, str(counters[message.chat.id]['ids']))
                         cursor.execute(qw)
                         db.commit()
                         bot.send_message(message.chat.id, 'Счет пополнен на ' + str(wow) + '🍆!')
@@ -600,7 +636,7 @@ def info_message(message):
                         bot.send_message(message.chat.id, 'Такого юзера не существует!')
 
             ms = message.text
-            if counters[message.chat.id]['cec'] == 1:   
+            if counters[message.chat.id]['cec'] == 1:
                 if len(ms) != 9:
                     bot.send_message(message.chat.id, 'Не корректный id, повторите ввод:')
                 if len(ms) == 9:
@@ -608,7 +644,7 @@ def info_message(message):
                         bot.send_message(message.chat.id, 'id введен не корректно, повторите ввод:')
                     if ms.isdigit() == True:
                         counters[message.chat.id]['ids'] = message.text
-                        qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(str(counters[message.chat.id]['ids'])) 
+                        qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(str(counters[message.chat.id]['ids']))
                         cursor.execute(qw)
                         ww[message.chat.id]['result'] = cursor.fetchall()
                         if len(ww[message.chat.id]['result']) != 0:
@@ -618,15 +654,14 @@ def info_message(message):
                         else:
                             bot.send_message(message.chat.id, 'Такого юзера не существует!')
 
-
-            if message.text == 'овощи' and counters[message.chat.id]['cec'] == 0:  
-                bot.send_message(message.chat.id, 'id пользователя:') 
+            if message.text == 'овощи' and counters[message.chat.id]['cec'] == 0:
+                bot.send_message(message.chat.id, 'id пользователя:')
                 counters[message.chat.id]['cec'] = 1
 
         if counters[message.chat.id]['f'] == 0 and users[message.chat.id]['subject'] in ["r", "z", "a", "g", "an", "f", "b", "y", "yk", "h", "ge", "v", "i", "fi", "in", "o", "p"]:
 
             price = message.text
-            if counters[message.chat.id]['coc'] == 1:   
+            if counters[message.chat.id]['coc'] == 1:
                 price = message.text
                 if len(str(price)) >= 5:
                     bot.send_message(message.chat.id, 'Я конечно все понимаю, но это уже перебор...')
@@ -638,14 +673,14 @@ def info_message(message):
                     counters[message.chat.id]['coc'] = 0
                     counters[message.chat.id]['f'] = 1
 
-            if counters[message.chat.id]['zwz'] == 1 and counters[message.chat.id]['coc'] == 0:  
+            if counters[message.chat.id]['zwz'] == 1 and counters[message.chat.id]['coc'] == 0:
                 counters[message.chat.id]['zwz'] = 0
                 counters[message.chat.id]['coc'] = 1
 
             if msg == 'готово' and users[message.chat.id]['class'] != '' and users[message.chat.id]['subject'] != '':
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
                 key.row('отмена')
-                bot.send_message(message.chat.id, "Отлично! Назначьте цену🍆:",reply_markup=key) 
+                bot.send_message(message.chat.id, "Отлично! Назначьте цену🍆:",reply_markup=key)
                 counters[message.chat.id]['coc'] = 1
 
         if msg == 'get id':
@@ -654,10 +689,10 @@ def info_message(message):
     #    if msg == 'пополнить счет':
     #        bot.send_message(message.chat.id, "Для покупки овощей🍆 подходите в будни на большой перемене в 8 кабинет ( лично к Егору Котеневу ), |текущий курс: покупка - 0,55 ||| продажа - 0,5грн|, продажа от 10🍆!")
 
-        if counters[message.chat.id]['csc'] == 0 and msg == 'добавить коментарий' and users[message.chat.id]['subject'] in ["r", "z", "a", "g", "an", "f", "b", "y", "yk", "h", "ge", "v", "i", "fi", "in", "o", "p"]: 
+        if counters[message.chat.id]['csc'] == 0 and msg == 'добавить описание' and users[message.chat.id]['subject'] in ["r", "z", "a", "g", "an", "f", "b", "y", "yk", "h", "ge", "v", "i", "fi", "in", "o", "p"]:
             key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
             key.row('готово', 'отмена')
-            bot.send_message(message.chat.id, 'Следующее сообщение станет коментарием:',reply_markup=key) 
+            bot.send_message(message.chat.id, 'Следующее сообщение станет описанием:',reply_markup=key)
             counters[message.chat.id]['csc'] = 1
 
         if message.chat.id == 562050144 and msg == 'все' or message.chat.id == 684759645 and msg == 'все' or message.chat.id == 653376416 and msg == 'все':
@@ -708,19 +743,76 @@ def info_message(message):
         if message.chat.id != 653376416 and message.chat.id != 562050144 and msg == 'я':
             qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(str(message.chat.id))
             cursor.execute(qw)
-            ww[message.chat.id]['result'] = cursor.fetchall() 
+            ww[message.chat.id]['result'] = cursor.fetchall()
             if len(ww[message.chat.id]['result']) != 0:
                 bot.send_message(message.chat.id, txt(ww[message.chat.id]['result'][0][0]) + ', мой id:\n' + str(message.chat.id))
             else:
                 bot.send_message(message.chat.id, 'Зарегистрируйтесь!')
+                
+        if counters[message.chat.id]['count'] == 101:
+
+            price = message.text
+            price = message.text
+            if len(str(price)) >= 5:
+                bot.send_message(message.chat.id, 'Я конечно все понимаю, но это уже перебор... Повторите ввод:')
+            if price.isdigit() == False:
+                bot.send_message(message.chat.id, 'Цена введена не корректно, повторите ввод:')
+            if price.isdigit() == True and len(str(price)) < 5 and int(price) >= 0:
+                price = message.text
+                users[message.chat.id]['price'] = str(price)
+                counters[message.chat.id]['coc'] = 0
+
+                qw = "UPDATE `test`.`users` SET `price` = %d WHERE `id` = %d" %(int(users[message.chat.id]['price']), int(ww[message.chat.id]['idx']))
+                cursor.execute(qw)
+                db.commit()
+
+                bot.send_message(message.chat.id, "Цена изменена на " + str(users[message.chat.id]['price']) + "🍆")
+                counters[message.chat.id]['count'] = 0
+            
+        if counters[message.chat.id]['count'] == 102:
+            
+            qw = "UPDATE `test`.`users` SET `note` = '%s' WHERE `id` = '%d'" %(code(message.text), int(ww[message.chat.id]['idx']))
+            cursor.execute(qw)
+            db.commit()
+            
+            bot.send_message(message.chat.id, "Описание изменено на <" + str(message.text) + ">")
+            counters[message.chat.id]['count'] = 0
+
+        if msg == "мои объявления":
+            qw = "SELECT `file_path` FROM `users` WHERE `user id` = %s" %(message.chat.id)
+            cursor.execute(qw)
+            ww[message.chat.id]['result'] = cursor.fetchall()
+            print(ww[message.chat.id]['result'])
+            ww[message.chat.id]['row'] = ''
+            for ww[message.chat.id]['row'] in ww[message.chat.id]['result']:
+                if ww[message.chat.id]['row'][0] == '':
+                    counters[message.chat.id]['cou'] = 0
+                else:
+                    counters[message.chat.id]['cou'] = 1
+                    break
+            if counters[message.chat.id]['cou'] == 1:
+                key = types.InlineKeyboardMarkup()
+                but_0 = types.InlineKeyboardButton(text="20 объявлений",callback_data="Tw")
+                but_1 = types.InlineKeyboardButton(text="10 объявлений",callback_data="Te")
+                but_2 = types.InlineKeyboardButton(text="5 объявлений",callback_data="Fi")
+                but_3 = types.InlineKeyboardButton(text="2 объявления",callback_data="Wo")
+                key.add(but_0, but_1)
+                key.add(but_2, but_3)
+                bot.send_message(message.chat.id, "Показать последние:", reply_markup = key)
+            else:
+                bot.send_message(message.chat.id, "У вас нет объявлений😐")
 
         if msg == 'пополнить счет':
-            bot.send_message(message.chat.id, "Для покупки овощей🍆/гривен подойди в будни на большой перемене в 8 кабинет к Егору Котеневу, у него ты сможешь купить 🍆/грн. Все просто! Удачи!\n\nP.S. В скором будущем будет введен более удобный способ пополнения счета и купли/продажи в целом!")
+            key = types.InlineKeyboardMarkup()
+            but1 = types.InlineKeyboardButton(text="1",callback_data="1one1")
+            but2 = types.InlineKeyboardButton(text="2",callback_data="2two2")
+            key.add(but1, but2)
+            bot.send_message(message.chat.id, "Для покупки или обналичивания 🍆 выберите один из следующих вариантов: \n1)  Нажав на кнопку 1 нужно будет ввести свое имя, фамилию, класс или любые другие данные по которым менеджер сможет вас найти. Тем самым вы подаете заявку и на большой перемене к вам подайдет менеджер который все и расскажет ( если введенные вами данные покажутся не достоверными, то менеджер не придет )\n2)  Подойди в будни на большой перемене в 8 кабинет и спроси <У кого пополнять счет?>, человек к которому тебя направят предоставит неоспоримые доказательства что он это он. У него можно купить или обналичить 🍆.\n\nУчитывайте что менеджера может не быть в школе!", reply_markup = key)
 
         if msg == 'баланс':
             qw = "SELECT `balance` FROM `users` WHERE `user id` = '%s'" %(message.chat.id)
             cursor.execute(qw)
-            ww[message.chat.id]['result'] = cursor.fetchall()  
+            ww[message.chat.id]['result'] = cursor.fetchall()
             if ww[message.chat.id]['result'][0][0] == 0:
                 bot.send_message(message.chat.id, 'У тебя 0🍆')
             else:
@@ -729,7 +821,7 @@ def info_message(message):
         if counters[message.chat.id]['f'] == 1:
             key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
             key.row('опубликовать', 'отмена')
-            bot.send_message(message.chat.id, "Вот ваше сообщение. Опубликовать?",reply_markup=key) 
+            bot.send_message(message.chat.id, "Вот ваше объявление. Опубликовать?",reply_markup=key)
 
             if users[message.chat.id]['class'] == "1":
                 users[message.chat.id]['class_r'] = '7-Ф'
@@ -746,9 +838,9 @@ def info_message(message):
             if users[message.chat.id]['class'] == "7":
                 users[message.chat.id]['class_r'] = "9-Ф"
             if users[message.chat.id]['class'] == "8":
-                users[message.chat.id]['class_r'] = "9-М"   
+                users[message.chat.id]['class_r'] = "9-М"
             if users[message.chat.id]['class'] == "9":
-                users[message.chat.id]['class_r'] = "9-ХБ"  
+                users[message.chat.id]['class_r'] = "9-ХБ"
             if users[message.chat.id]['class'] == "10":
                 users[message.chat.id]['class_r'] = "10-Ф"
             if users[message.chat.id]['class'] == "11":
@@ -761,7 +853,8 @@ def info_message(message):
                 users[message.chat.id]['class_r'] = "11-М"
             if users[message.chat.id]['class'] == "15":
                 users[message.chat.id]['class_r'] = "11-ХБ"
-
+            if users[message.chat.id]['class'] == "16":
+                users[message.chat.id]['class_r'] = "общее"
 
             if users[message.chat.id]['subject'] == "r":
                 users[message.chat.id]['subject_r'] = 'Русский'
@@ -778,9 +871,9 @@ def info_message(message):
             if users[message.chat.id]['subject'] == "b":
                 users[message.chat.id]['subject_r'] = "Биология"
             if users[message.chat.id]['subject'] == "y":
-                users[message.chat.id]['subject_r'] = "Укр.яз"   
+                users[message.chat.id]['subject_r'] = "Укр.яз"
             if users[message.chat.id]['subject'] == "yk":
-                users[message.chat.id]['subject_r'] = "Укр.лит"  
+                users[message.chat.id]['subject_r'] = "Укр.лит"
             if users[message.chat.id]['subject'] == "h":
                 users[message.chat.id]['subject_r'] = "Химия"
             if users[message.chat.id]['subject'] == "ge":
@@ -809,34 +902,32 @@ def info_message(message):
 
             if users[message.chat.id]['note'] == '':
                 bot.send_message(message.chat.id, "🔑Цена:   " + users[message.chat.id]['price'] +
-                                 '🍆' + "\n🔥Предмет:   " + users[message.chat.id]['subject_r'] + 
-                                 "\n🔝Класс:   " + users[message.chat.id]['class_r'] + 
-                                 '\n📅Дата:  ' + users[message.chat.id]['date'].strftime('%Y-%m-%d')+ 
-                                 '\n🕑Время:   ' + users[message.chat.id]['date'].strftime('%H : %M')+ 
+                                 '🍆' + "\n🔥Предмет:   " + users[message.chat.id]['subject_r'] +
+                                 "\n🔝Класс:   " + users[message.chat.id]['class_r'] +
+                                 '\n📅Дата:  ' + users[message.chat.id]['date'].strftime('%Y-%m-%d')+
+                                 '\n🕑Время:   ' + users[message.chat.id]['date'].strftime('%H : %M')+
                                  '\n+ ' + str(len(users[message.chat.id]['file'])) + ' ' + pic)
                 counters[message.chat.id]['f'] = 0
             else:
-                bot.send_message(message.chat.id, "🔑Цена:   " + users[message.chat.id]['price'] + 
-                                 '🍆' + "\n🔥Предмет:   " + users[message.chat.id]['subject_r'] + 
-                                 "\n🔝Класс:   " + users[message.chat.id]['class_r'] + 
-                                 '\n📅Дата:  ' + users[message.chat.id]['date'].strftime('%Y-%m-%d')+ 
-                                 '\n🕑Время:   ' + users[message.chat.id]['date'].strftime('%H : %M')+ 
+                bot.send_message(message.chat.id, "🔑Цена:   " + users[message.chat.id]['price'] +
+                                 '🍆' + "\n🔥Предмет:   " + users[message.chat.id]['subject_r'] +
+                                 "\n🔝Класс:   " + users[message.chat.id]['class_r'] +
+                                 '\n📅Дата:  ' + users[message.chat.id]['date'].strftime('%Y-%m-%d')+
+                                 '\n🕑Время:   ' + users[message.chat.id]['date'].strftime('%H : %M')+
                                  '\n+ ' + str(len(users[message.chat.id]['file'])) + ' ' + pic +
-                                 '\nP.S. ' + users[message.chat.id]['note']) 
+                                 '\nP.S. ' + users[message.chat.id]['note'])
                 counters[message.chat.id]['f'] = 0
-
-
 
         if msg == 'опубликовать' and users[message.chat.id]['class'] != '' and users[message.chat.id]['subject'] != '' and users[message.chat.id]['file'] != '':
             qw = """INSERT INTO `test`.`users` (`id`, `user id`, `subject`, `class`, `date`, `note`, `file_path`, `balance`, `price`, `nickname`) VALUES( NULL, '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')"""%(message.chat.id,  users[message.chat.id]['subject'],users[message.chat.id]['class'], users[message.chat.id]['date'].strftime('%Y-%m-%d-%H-%M'),code(users[message.chat.id]['note']),"\n".join(users[message.chat.id]['file']),0,users[message.chat.id]['price'], '')
             cursor.execute(qw)
             db.commit()
             counters[message.chat.id]['bd'] = 1
-            qw = "SELECT `balance` FROM `users` WHERE `user id` = %s" %(message.chat.id) 
+            qw = "SELECT `balance` FROM `users` WHERE `user id` = %s" %(message.chat.id)
             cursor.execute(qw)
             ww[message.chat.id]['result'] = cursor.fetchall()
             ol = ww[message.chat.id]['result'][0][0]
-            qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(str(ol), message.chat.id)   
+            qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(str(ol), message.chat.id)
             cursor.execute(qw)
             db.commit()
 
@@ -849,14 +940,10 @@ def info_message(message):
                 bot.send_message(message.chat.id, 'Отлично! Объявление подано!',reply_markup=key)
             if users[message.chat.id]['noname'] == 0:
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                key.row("продать", "купить")
+                key.row("продать", "мои объявления", "купить")
                 key.row("пополнить счет", "баланс")
                 bot.send_message(message.chat.id, 'Отлично! Объявление подано!',reply_markup=key)
             counters[message.chat.id]['f'] = 0
-
-        #if msg == 'иилрмлРПАНЕАОПМ732еу6авыпфмрПМНЕФНП876е634н5467**/*4646466РРПЯЫПливрп874н3ащлывсъ\ылсыотсцшыычkjvndksbvdbosajaaskjag7678343284230-89=@$#!#@#%&%*&^(*)_+)_*(&^%$#%^&*()_OKJHBVCFR^T&U':
-
-        #    global pin
 
         if msg == 'купить':
 
@@ -870,8 +957,8 @@ def info_message(message):
                 r = cursor.fetchall()
                 for a in r:
                     users[chat_id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nickname': a[0], 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-                    buy_users[chat_id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-                    counters[chat_id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+                    buy_users[chat_id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+                    counters[chat_id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
                     ww[chat_id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
 
             qw = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s and `nickname` <> ''" %(message.chat.id)
@@ -881,36 +968,38 @@ def info_message(message):
 
             if len(result) != 0:
                 users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nickname': result[0], 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-                buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-                counters[message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+                buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+                counters[message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
                 ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
             else:
                 users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nickname': '', 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-                buy_users[message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-                counters[message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+                buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
+                counters[message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
                 ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
 
             ky = types.InlineKeyboardMarkup()
-            bt_1 = types.InlineKeyboardButton(text="7-Ф",callback_data="16")
-            bt_2 = types.InlineKeyboardButton(text="7-М",callback_data="17")
-            bt_3 = types.InlineKeyboardButton(text="7-ХБ",callback_data="18")
-            bt_4 = types.InlineKeyboardButton(text="8-Ф",callback_data="19")
-            bt_5 = types.InlineKeyboardButton(text="8-М",callback_data="20")
-            bt_6 = types.InlineKeyboardButton(text="8-ХБ",callback_data="21")
-            bt_7 = types.InlineKeyboardButton(text="9-Ф",callback_data="22")
-            bt_8 = types.InlineKeyboardButton(text="9-М",callback_data="23")
-            bt_9 = types.InlineKeyboardButton(text="9-ХБ",callback_data="24")
-            bt_10 = types.InlineKeyboardButton(text="10-Ф",callback_data="25")
-            bt_11 = types.InlineKeyboardButton(text="10-М",callback_data="26")
-            bt_12 = types.InlineKeyboardButton(text="10-ХБ",callback_data="27")
-            bt_13 = types.InlineKeyboardButton(text="11-Ф",callback_data="28")
-            bt_14 = types.InlineKeyboardButton(text="11-М",callback_data="29")
-            bt_15 = types.InlineKeyboardButton(text="11-ХБ",callback_data="30")
-            ky.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_13, bt_14, bt_15)
-            bot.send_message(message.chat.id, "Выберите ваш класс:", reply_markup=ky) 
+            bt_1 = types.InlineKeyboardButton(text="7-Ф",callback_data="17")
+            bt_2 = types.InlineKeyboardButton(text="7-М",callback_data="18")
+            bt_3 = types.InlineKeyboardButton(text="7-ХБ",callback_data="19")
+            bt_4 = types.InlineKeyboardButton(text="8-Ф",callback_data="20")
+            bt_5 = types.InlineKeyboardButton(text="8-М",callback_data="21")
+            bt_6 = types.InlineKeyboardButton(text="8-ХБ",callback_data="22")
+            bt_7 = types.InlineKeyboardButton(text="9-Ф",callback_data="23")
+            bt_8 = types.InlineKeyboardButton(text="9-М",callback_data="24")
+            bt_9 = types.InlineKeyboardButton(text="9-ХБ",callback_data="25")
+            bt_10 = types.InlineKeyboardButton(text="10-Ф",callback_data="26")
+            bt_11 = types.InlineKeyboardButton(text="10-М",callback_data="27")
+            bt_12 = types.InlineKeyboardButton(text="10-ХБ",callback_data="28")
+            bt_13 = types.InlineKeyboardButton(text="11-Ф",callback_data="29")
+            bt_14 = types.InlineKeyboardButton(text="11-М",callback_data="30")
+            bt_15 = types.InlineKeyboardButton(text="11-ХБ",callback_data="31")
+            bt_16 = types.InlineKeyboardButton(text="общее",callback_data="32")
+
+            ky.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_13, bt_14, bt_15, bt_16)
+            bot.send_message(message.chat.id, "Выберите ваш класс:", reply_markup=ky)
 
             key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-            key.row('отмена') 
+            key.row('отмена')
             bot.send_message(message.chat.id, "Вы всегда можете отменить действие.",reply_markup=key)
         if msg == 'продать':
             azaza = 0
@@ -939,8 +1028,10 @@ def info_message(message):
                 bt_13 = types.InlineKeyboardButton(text="11-Ф",callback_data="13")
                 bt_14 = types.InlineKeyboardButton(text="11-М",callback_data="14")
                 bt_15 = types.InlineKeyboardButton(text="11-ХБ",callback_data="15")
-                ky.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_13, bt_14, bt_15)
-                bot.send_message(message.chat.id, "Выберите ваш класс:", reply_markup=ky) 
+                bt_16 = types.InlineKeyboardButton(text="общее",callback_data="16")
+
+                ky.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_13, bt_14, bt_15, bt_16)
+                bot.send_message(message.chat.id, "Выберите ваш класс:", reply_markup=ky)
 
                 key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
                 key.row('отмена')
@@ -951,45 +1042,45 @@ def info_message(message):
                 key.row("пополнить счет", "регистрация", "баланс")
                 bot.send_message(message.chat.id, 'Чтобы продавать нужно зарегистрироваться!',reply_markup=key)
     else:
-        bot.send_photo(message.chat.id, open('D:\Дима\Програмирование\Python\BOT\Фото\Angrybot.jpg', 'rb'))
+        bot.send_photo(message.chat.id, open('//home//my_project//photos//Angrybot.jpg', 'rb'))
         bot.send_message(message.chat.id, 'Вы забанены! По всем вопросам —> @RL_support_Bot')
-        
+
 @bot.callback_query_handler(func=lambda c:True)
 def inline(c):
     global count_er
     global io
     if c.message.chat.id not in users.keys() or c.message.chat.id not in buy_users.keys() or c.message.chat.id not in ww.keys() or c.message.chat.id not in counters.keys():
-        
+
         qw = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s and `nickname` <> ''" %(c.message.chat.id)
         cursor.execute(qw)
         result = cursor.fetchall()
         result = txt(result)
-        
+
         if len(result) != 0:
             users[c.message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r':'', 'c.data': 0, 'nickname': result[0], 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
             buy_users[c.message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-            counters[c.message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+            counters[c.message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
             ww[c.message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
         else:
             users[c.message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r': '','c.data': 0, 'nickname': '', 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
             buy_users[c.message.chat.id] = {'buy_class_r': '','buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-            counters[c.message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+            counters[c.message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
             ww[c.message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
     users[c.message.chat.id]['c.data'] = c.data
-    
-    qw = "SELECT `ban` FROM `personal` WHERE `user id` = %s" %(str(c.message.chat.id)) 
+
+    qw = "SELECT `ban` FROM `personal` WHERE `user id` = %s" %(str(c.message.chat.id))
     cursor.execute(qw)
     result = cursor.fetchall()
     nore = 0
     if len(result) == 0:
         nore = 1
     if nore == 0 and result[0][0] == 0 or nore == 1:
-    
+
         qw = "SELECT distinct `user id` FROM `personal`"
         cursor.execute(qw)
         ww[c.message.chat.id]['assessment'] = cursor.fetchall()
         for i in ww[c.message.chat.id]['assessment']:
-            if i[0] in users[c.message.chat.id]['c.data']:
+            if i[0] in users[c.message.chat.id]['c.data'] and "cancel" not in users[c.message.chat.id]['c.data'] and "accept" not in users[c.message.chat.id]['c.data']:
                 if ww[c.message.chat.id]['cou'] == 0:
                     if users[c.message.chat.id]['c.data'] == '1⭐️' + i[0]:
                         ww[c.message.chat.id]['rating'] = 1.0
@@ -1082,7 +1173,7 @@ def inline(c):
 
                         qw = "SELECT distinct `N` FROM `personal` WHERE `user id` = %s" %(i[0])
                         cursor.execute(qw)
-                        ww[c.message.chat.id]['N'] = cursor.fetchall()  
+                        ww[c.message.chat.id]['N'] = cursor.fetchall()
 
                         qw = """UPDATE `personal` SET `stars` = %s WHERE `user id` = %s """ %((ww[c.message.chat.id]['rating'] + rat[0][0])/ww[c.message.chat.id]['N'][0][0], i[0])
                         cursor.execute(qw)
@@ -1116,20 +1207,53 @@ def inline(c):
                 else:
                     bot.send_message(c.message.chat.id, "Ваша оценка уже учтена!")
 
-
         if len(str(users[c.message.chat.id]['nickname'])) == 0:
             users[c.message.chat.id]['noname'] = 1
         else:
             users[c.message.chat.id]['noname'] = 0
+            
+        if 'redpr' in users[c.message.chat.id]['c.data']:
+            ww[c.message.chat.id]['idx'] = users[c.message.chat.id]['c.data']
+            ww[c.message.chat.id]['idx'] = ww[c.message.chat.id]['idx'].replace('redpr', '')
+            
+            counters[c.message.chat.id]['count'] = 101
+            bot.send_message(c.message.chat.id, "Новая цена🍆:")
+            
+        if 'reddisc' in users[c.message.chat.id]['c.data']:
+            ww[c.message.chat.id]['idx'] = users[c.message.chat.id]['c.data']
+            ww[c.message.chat.id]['idx'] = ww[c.message.chat.id]['idx'].replace('reddisc', '')
+            
+            counters[c.message.chat.id]['count'] = 102
+            bot.send_message(c.message.chat.id, "Введите новое описание:")
+            
+        if 'redact' in users[c.message.chat.id]['c.data']:
+            ww[c.message.chat.id]['idx'] = users[c.message.chat.id]['c.data']
+            ww[c.message.chat.id]['idx'] = ww[c.message.chat.id]['idx'].replace('redact', '')
 
-        if 'buy_button' in users[c.message.chat.id]['c.data']: 
+            key = types.InlineKeyboardMarkup()
+            but_0 = types.InlineKeyboardButton(text="Цену",callback_data = "redpr" + ww[c.message.chat.id]['idx'])
+            but_1 = types.InlineKeyboardButton(text="Описание",callback_data = "reddisc" + ww[c.message.chat.id]['idx'])
+            key.add(but_0, but_1)
+            bot.send_message(c.message.chat.id, "Изменить", reply_markup = key)
+
+        if 'del' in users[c.message.chat.id]['c.data']:
+            ww[c.message.chat.id]['idx'] = users[c.message.chat.id]['c.data']
+            ww[c.message.chat.id]['idx'] = ww[c.message.chat.id]['idx'].replace('del', '')
+
+            qw = "DELETE FROM `users` WHERE `id` = %s" %(ww[c.message.chat.id]['idx'])
+            cursor.execute(qw)
+            db.commit()
+            
+            bot.send_message(c.message.chat.id, "Объявление удалено!")
+            
+        if 'buy_button' in users[c.message.chat.id]['c.data']:
             ww[c.message.chat.id]['idx'] = users[c.message.chat.id]['c.data']
             ww[c.message.chat.id]['idx'] = ww[c.message.chat.id]['idx'].replace('buy_button', '')
             qw = "SELECT `balance` FROM `users` WHERE `user id` = '%s'" %(c.message.chat.id)
             cursor.execute(qw)
-            ww[c.message.chat.id]['price0'] = cursor.fetchall()  
+            ww[c.message.chat.id]['price0'] = cursor.fetchall()
             ww[c.message.chat.id]['price1'] = ww[c.message.chat.id]['price0'][0][0]
-            qw = "SELECT * FROM `users` WHERE `id` = '%d' and `subject` = '%s' and `class` = '%s'" %(int(ww[c.message.chat.id]['idx']), buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class']) 
+            qw = "SELECT * FROM `users` WHERE `id` = '%d' and `subject` = '%s' and `class` = '%s'" %(int(ww[c.message.chat.id]['idx']), buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])
             cursor.execute(qw)
             ww[c.message.chat.id]['result'] = cursor.fetchall()
             ww[c.message.chat.id]['result'].reverse()
@@ -1146,28 +1270,28 @@ def inline(c):
                     pic = 'картинки.'
                 if num%10 in [5,6,7,8,9,0] :
                     pic = 'картинок.'
-                    
+
                 qw = "SELECT `super` FROM `personal` WHERE `user id` = '%s'" %(c.message.chat.id)
                 cursor.execute(qw)
                 ww[c.message.chat.id]['result'] = cursor.fetchall()
                 resin = ww[c.message.chat.id]['result']
-                if int(ww[c.message.chat.id]['price1']) >= int(ww[c.message.chat.id]['row'][8]) or ww[c.message.chat.id]['result'][0][0] == 1:
-                    qw = "SELECT `user id` FROM `users` WHERE `id` = '%d' and `subject` = '%s' and `class` = '%s'" %(int(ww[c.message.chat.id]['idx']), buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class']) 
-                    cursor.execute(qw)
-                    ww[c.message.chat.id]['result'] = cursor.fetchall()
-                    ww[c.message.chat.id]['result'].reverse()
-                    ww[c.message.chat.id]['mid'] = ww[c.message.chat.id]['result'][0][0]
+                qw = "SELECT `user id` FROM `users` WHERE `id` = '%d' and `subject` = '%s' and `class` = '%s'" %(int(ww[c.message.chat.id]['idx']), buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])
+                cursor.execute(qw)
+                ww[c.message.chat.id]['result'] = cursor.fetchall()
+                ww[c.message.chat.id]['result'].reverse()
+                ww[c.message.chat.id]['mid'] = ww[c.message.chat.id]['result'][0][0]
 
-                    qv = "SELECT `user id` FROM `users` WHERE `id` = '%d' and `subject` = '%s' and `class` = '%s'" %(int(ww[c.message.chat.id]['row'][0]), buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class']) 
-                    cursor.execute(qw)
-                    ww[c.message.chat.id]['result'] = cursor.fetchall()
-                    ww[c.message.chat.id]['result'].reverse()
-                    ww[c.message.chat.id]['mad'] = ww[c.message.chat.id]['result'][0][0]
-
+                qv = "SELECT `user id` FROM `users` WHERE `id` = '%d' and `subject` = '%s' and `class` = '%s'" %(int(ww[c.message.chat.id]['row'][0]), buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])
+                cursor.execute(qw)
+                ww[c.message.chat.id]['result'] = cursor.fetchall()
+                ww[c.message.chat.id]['result'].reverse()
+                ww[c.message.chat.id]['mad'] = ww[c.message.chat.id]['result'][0][0]
+                if int(ww[c.message.chat.id]['price1']) >= int(ww[c.message.chat.id]['row'][8]) or ww[c.message.chat.id]['result'][0][0] == 1 or str(c.message.chat.id) == ww[c.message.chat.id]['mid']:
                     pric = ww[c.message.chat.id]['row'][8]
-                    qw = """UPDATE `users` SET `balance` = %d WHERE `user id` = %d """ %(ww[c.message.chat.id]['delta'], c.message.chat.id)
-                    cursor.execute(qw)
-                    db.commit()
+                    if str(c.message.chat.id) != ww[c.message.chat.id]['mid']:
+                        qw = """UPDATE `users` SET `balance` = %d WHERE `user id` = %d """ %(ww[c.message.chat.id]['delta'], c.message.chat.id)
+                        cursor.execute(qw)
+                        db.commit()
 
                     if ww[c.message.chat.id]['row'][2] == "r":
                         users[c.message.chat.id]['subject_r'] = 'Русский'
@@ -1184,9 +1308,9 @@ def inline(c):
                     if ww[c.message.chat.id]['row'][2] == "b":
                         users[c.message.chat.id]['subject_r'] = "Биология"
                     if ww[c.message.chat.id]['row'][2] == "y":
-                        users[c.message.chat.id]['subject_r'] = "Укр.яз"   
+                        users[c.message.chat.id]['subject_r'] = "Укр.яз"
                     if ww[c.message.chat.id]['row'][2] == "yk":
-                        users[c.message.chat.id]['subject_r'] = "Укр.лит"  
+                        users[c.message.chat.id]['subject_r'] = "Укр.лит"
                     if ww[c.message.chat.id]['row'][2] == "h":
                         users[c.message.chat.id]['subject_r'] = "Химия"
                     if ww[c.message.chat.id]['row'][2] == "ge":
@@ -1219,9 +1343,9 @@ def inline(c):
                     if ww[c.message.chat.id]['row'][3] == "7":
                         users[c.message.chat.id]['class_r'] = "9-Ф"
                     if ww[c.message.chat.id]['row'][3] == "8":
-                        users[c.message.chat.id]['class_r'] = "9-М"   
+                        users[c.message.chat.id]['class_r'] = "9-М"
                     if ww[c.message.chat.id]['row'][3] == "9":
-                        users[c.message.chat.id]['class_r'] = "9-ХБ"  
+                        users[c.message.chat.id]['class_r'] = "9-ХБ"
                     if ww[c.message.chat.id]['row'][3] == "10":
                         users[c.message.chat.id]['class_r'] = "10-Ф"
                     if ww[c.message.chat.id]['row'][3] == "11":
@@ -1234,43 +1358,46 @@ def inline(c):
                         users[c.message.chat.id]['class_r'] = "11-М"
                     if ww[c.message.chat.id]['row'][3] == "15":
                         users[c.message.chat.id]['class_r'] = "11-ХБ"
+                    if ww[c.message.chat.id]['row'][3] == "16":
+                        users[c.message.chat.id]['class_r'] = "общее"
 
                     q = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s and `nickname` <> ''" %(ww[c.message.chat.id]['mad'])
                     cursor.execute(q)
                     ww[c.message.chat.id]['rabotay'] = cursor.fetchall()
 
                     if ww[c.message.chat.id]['row'][5] == '':
-                        bot.send_message(c.message.chat.id, "Вы купили:" +   
+                        bot.send_message(c.message.chat.id, "Вы купили:" +
                                      "\n\n🔑Цена:   " + str(ww[c.message.chat.id]['row'][8]) + '🍆' +
-                                     "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] + 
-                                     "\n🔝Класс:   " +  users[c.message.chat.id]['class_r'] + 
-                                     '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') + 
-                                     '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') + 
+                                     "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] +
+                                     "\n🔝Класс:   " +  users[c.message.chat.id]['class_r'] +
+                                     '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') +
+                                     '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') +
                                      '\n+ ' + str(num) + ' ' + pic +
                                      '\nПродавец: ' + str(txt(ww[c.message.chat.id]['rabotay'])))
                         for ph in ww[c.message.chat.id]['row'][6].split('\n'):
                             bot.send_photo(c.message.chat.id, open(ph, 'rb'))
-                        
-                        
-                        qw = "SELECT `super` FROM `personal` WHERE `user id` = '%s'" %(c.message.chat.id)
+
+
+                        qw = "SELECT distinct `super` FROM `personal` WHERE `user id` = '%s'" %(c.message.chat.id)
                         cursor.execute(qw)
                         ww[c.message.chat.id]['result'] = cursor.fetchall()
-                        if ww[c.message.chat.id]['result'][0][0] == 0: 
-                            qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(str(ww[c.message.chat.id]['result'][0][0])) 
-                            cursor.execute(qw)
-                            ww[c.message.chat.id]['result'] = cursor.fetchall()
-                            if len(ww[c.message.chat.id]['result']) != 0:
-                                ww[c.message.chat.id]['oldbal'] = ww[c.message.chat.id]['result'][0][0]
-                            else:
-                                ww[c.message.chat.id]['oldbal'] = 0
-                            ww[c.message.chat.id]['new_balance'] = int(ww[c.message.chat.id]['oldbal']) + pric
-
-                            qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(str(ww[c.message.chat.id]['new_balance']), str(ww[c.message.chat.id]['mid']))   
-                            cursor.execute(qw)
-                            db.commit()
+                        if ww[c.message.chat.id]['result'][0][0] == 0:
                             if str(c.message.chat.id) != ww[c.message.chat.id]['mid']:
+                                qw = "SELECT distinct `balance` FROM `users` WHERE `user id` = %s" %(str(ww[c.message.chat.id]['mid']))
+                                cursor.execute(qw)
+                                ww[c.message.chat.id]['result'] = cursor.fetchall()
+
+                                if len(ww[c.message.chat.id]['result']) != 0:
+                                    ww[c.message.chat.id]['oldbal'] = ww[c.message.chat.id]['result'][0][0]
+                                else:
+                                    ww[c.message.chat.id]['oldbal'] = 0
+                                ww[c.message.chat.id]['new_balance'] = int(ww[c.message.chat.id]['oldbal']) + pric
+
+                                qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(str(ww[c.message.chat.id]['new_balance']), str(ww[c.message.chat.id]['mid']))
+                                cursor.execute(qw)
+                                db.commit()
                                 bot.send_message(ww[c.message.chat.id]['mid'], "Пришел зароботок с продаж: " + str(pric) + "🍆")
-                                if int(ww[c.message.chat.id]['row'][8]) >= 2:
+                                if int(ww[c.message.chat.id]['row'][8]) >= 1:
                                     key = types.InlineKeyboardMarkup()
                                     button1 = types.InlineKeyboardButton(text="⭐️",callback_data = "1⭐️" + str(ww[c.message.chat.id]['mid']))
                                     button2 = types.InlineKeyboardButton(text="⭐️⭐️",callback_data = "2⭐️" + str(ww[c.message.chat.id]['mid']))
@@ -1290,33 +1417,34 @@ def inline(c):
                     else:
                         bot.send_message(c.message.chat.id, "Вы купили:" +
                                      "\n\n🔑Цена:   " + str(ww[c.message.chat.id]['row'][8]) + '🍆' +
-                                     "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] + 
-                                     "\n🔝Класс:   " +  users[c.message.chat.id]['class_r'] + 
-                                     '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') + 
-                                     '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') + 
-                                     '\n+ ' + str(num) + ' ' + pic + 
+                                     "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] +
+                                     "\n🔝Класс:   " +  users[c.message.chat.id]['class_r'] +
+                                     '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') +
+                                     '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') +
+                                     '\n+ ' + str(num) + ' ' + pic +
                                      '\nP.S. ' + txt(ww[c.message.chat.id]['row'][5]) +
                                      '\nПродавец: ' + str(txt(ww[c.message.chat.id]['rabotay'])))
                         for ph in ww[c.message.chat.id]['row'][6].split('\n'):
                             bot.send_photo(c.message.chat.id, open(ph, 'rb'))
-                        qw = "SELECT `super` FROM `personal` WHERE `user id` = '%s'" %(c.message.chat.id)
+                        qw = "SELECT distinct `super` FROM `personal` WHERE `user id` = '%s'" %(c.message.chat.id)
                         cursor.execute(qw)
                         ww[c.message.chat.id]['result'] = cursor.fetchall()
-                        if ww[c.message.chat.id]['result'][0][0] == 0: 
-                            qw = "SELECT `balance` FROM `users` WHERE `user id` = %s" %(str(ww[c.message.chat.id]['result'][0][0])) 
-                            cursor.execute(qw)
-                            ww[c.message.chat.id]['result'] = cursor.fetchall()
-                            if len(ww[c.message.chat.id]['result']) != 0:
-                                ww[c.message.chat.id]['oldbal'] = ww[c.message.chat.id]['result'][0][0]
-                            else:
-                                ww[c.message.chat.id]['oldbal'] = 0
-                            ww[c.message.chat.id]['new_balance'] = int(ww[c.message.chat.id]['oldbal']) + pric
-                            qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(str(ww[c.message.chat.id]['new_balance']), str(ww[c.message.chat.id]['mid']))   
-                            cursor.execute(qw)
-                            db.commit()
+                        if ww[c.message.chat.id]['result'][0][0] == 0:
                             if str(c.message.chat.id) != ww[c.message.chat.id]['mid']:
+                                qw = "SELECT `balance` FROM `users` WHERE `user id` = %s" %(str(ww[c.message.chat.id]['mid']))
+                                cursor.execute(qw)
+                                ww[c.message.chat.id]['result'] = cursor.fetchall()
+
+                                if len(ww[c.message.chat.id]['result']) != 0:
+                                    ww[c.message.chat.id]['oldbal'] = ww[c.message.chat.id]['result'][0][0]
+                                else:
+                                    ww[c.message.chat.id]['oldbal'] = 0
+                                ww[c.message.chat.id]['new_balance'] = int(ww[c.message.chat.id]['oldbal']) + pric
+                                qw = """UPDATE `users` SET `balance` = %s WHERE `user id` = %s """ %(str(ww[c.message.chat.id]['new_balance']), str(ww[c.message.chat.id]['mid']))
+                                cursor.execute(qw)
+                                db.commit()
                                 bot.send_message(ww[c.message.chat.id]['mid'], "Пришел зароботок с продаж: " + str(pric) + "🍆")
-                                if int(ww[c.message.chat.id]['row'][8]) >= 2:
+                                if int(ww[c.message.chat.id]['row'][8]) >= 1:
                                     key = types.InlineKeyboardMarkup()
                                     button1 = types.InlineKeyboardButton(text="⭐️",callback_data = "1⭐️" + str(ww[c.message.chat.id]['mid']))
                                     button2 = types.InlineKeyboardButton(text="⭐️⭐️",callback_data = "2⭐️" + str(ww[c.message.chat.id]['mid']))
@@ -1336,13 +1464,10 @@ def inline(c):
                 qw = "SELECT `super` FROM `personal` WHERE `user id` = '%s'" %(c.message.chat.id)
                 cursor.execute(qw)
                 ww[c.message.chat.id]['result'] = cursor.fetchall()
-                if int(ww[c.message.chat.id]['price1']) < int(ww[c.message.chat.id]['row'][8]) and resin[0][0] == 0:
-                    bot.send_message(c.message.chat.id, "У вас недостаточно средств для покупки этого Д.З.")
-                    bot.send_message(c.message.chat.id, "На вашем счету " + str(ww[c.message.chat.id]['delta']) + '🍆' )
+                if int(ww[c.message.chat.id]['price1']) < int(ww[c.message.chat.id]['row'][8]) and resin[0][0] == 0 and str(c.message.chat.id) != ww[c.message.chat.id]['mid']:
+                    bot.send_message(c.message.chat.id, "У вас недостаточно средств.\n\nНа вашем счету " + str(ww[c.message.chat.id]['delta']) + '🍆')
 
-        
-                    
-        qw = "SELECT `nickname` FROM `personal`" 
+        qw = "SELECT `nickname` FROM `personal`"
         cursor.execute(qw)
         ww[c.message.chat.id]['result'] = cursor.fetchall()
         for i in ww[c.message.chat.id]['result']:
@@ -1365,11 +1490,27 @@ def inline(c):
                     count_er = 1
                     io = i[0]
 
-        
-        if users[c.message.chat.id]['c.data'] in [str(i) for i in range(16,31)]:
+        if "cancel" in str(users[c.message.chat.id]['c.data']):
+            bot.send_message(str(users[c.message.chat.id]['c.data']).replace("cancel",""), "Запрос отклонен, воспользуйтесь пунктом №2 во вкладке <пополнить счет>. \nP.S. Нас может не быть в школе.")
+
+        elif "accept" in str(users[c.message.chat.id]['c.data']):
+            bot.send_message(str(users[c.message.chat.id]['c.data']).replace("accept",""), "Запрос подтвержден.")
+
+        if users[c.message.chat.id]['c.data'] == "1one1" or users[c.message.chat.id]['c.data'] == "2two2":
+
+            if users[c.message.chat.id]['c.data'] == "1one1":
+                key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+                key.row("отмена")
+                bot.send_message(c.message.chat.id, "Введите свои контактные данные ( имя, класс и т.п. ) или нажмите отмена." ,reply_markup=key)
+                counters[c.message.chat.id]['count_4'] = 1
+
+            else:
+                bot.send_message(c.message.chat.id, "Вы выбрали 2-й вариант, ждем в 8 кабинете на большой перемене! ( учитывайте что нас в школе может не быть )")
+
+        if users[c.message.chat.id]['c.data'] in [str(i) for i in range(17,33)]:
             if c.message.chat.id not in buy_users.keys():
-                buy_users[c.message.chat.id] = {'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': [], 'price': ''}
-            if buy_users[c.message.chat.id]['buy_class'] not in [str(i) for i in range(16,31)]:
+                buy_users[c.message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': [], 'price': ''}
+            if buy_users[c.message.chat.id]['buy_class'] not in [str(i) for i in range(17,32)]:
                 key = types.InlineKeyboardMarkup()
                 but_1 = types.InlineKeyboardButton(text="Русский",callback_data="r.")
                 but_2 = types.InlineKeyboardButton(text="Зарубежку",callback_data="z.")
@@ -1389,13 +1530,11 @@ def inline(c):
                 but_16 = types.InlineKeyboardButton(text="Основы здоровья",callback_data="o.")
                 but_17 = types.InlineKeyboardButton(text="Полезную инфу",callback_data="p.")
                 key.add(but_1, but_2, but_3, but_4, but_5, but_6, but_7, but_8, but_9, but_10, but_11, but_12, but_13, but_14, but_15, but_16, but_17)
-                bot.send_message(c.message.chat.id, "Что купить?", reply_markup=key)  
-
+                bot.send_message(c.message.chat.id, "Что купить?", reply_markup=key)
 
                 buy_users[c.message.chat.id]['buy_class'] = users[c.message.chat.id]['c.data']
 
         if users[c.message.chat.id]['c.data'] in ["r.", "z.", "a.", "g.", "an.", "f.", "b.", "y.", "yk.", "h.", "ge.", "v.", "i.", "fi.", "in.", "o.", "p."]:
-
 
             if users[c.message.chat.id]['c.data'] == "r.":
                 sb = 'r'
@@ -1441,13 +1580,13 @@ def inline(c):
             key.add(but_1, but_2, but_3)
             bot.send_message(c.message.chat.id, "Показать последние:", reply_markup=key)
 
-        if users[c.message.chat.id]['c.data'] in ['T','F','W']:
+        if users[c.message.chat.id]['c.data'] in ['F','T','W','Tw','Te','Fi','Wo']:
             buy_users[c.message.chat.id]['buynum'] = users[c.message.chat.id]['c.data']
 
-        if users[c.message.chat.id]['c.data'] in [str(i) for i in range(1,16)] and counters[c.message.chat.id]['buy_data'] == 0:
+        if users[c.message.chat.id]['c.data'] in [str(i) for i in range(1,17)] and counters[c.message.chat.id]['buy_data'] == 0:
             if c.message.chat.id not in users.keys():
                 users[c.message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '', 'class_r': '','c.data': 0, 'nickname': '', 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
-            if users[c.message.chat.id]['class'] not in [str(i) for i in range(1,16)]:
+            if users[c.message.chat.id]['class'] not in [str(i) for i in range(1,17)]:
                 key = types.InlineKeyboardMarkup()
                 but_1 = types.InlineKeyboardButton(text="Русский",callback_data="r")
                 but_2 = types.InlineKeyboardButton(text="Зарубежку",callback_data="z")
@@ -1467,7 +1606,7 @@ def inline(c):
                 but_16 = types.InlineKeyboardButton(text="Основы здоровья",callback_data="o")
                 but_17 = types.InlineKeyboardButton(text="Полезную инфу",callback_data="p")
                 key.add(but_1, but_2, but_3, but_4, but_5, but_6, but_7, but_8, but_9, but_10, but_11, but_12, but_13, but_14, but_15, but_16, but_17)
-                bot.send_message(c.message.chat.id, "Что продать?", reply_markup=key)   
+                bot.send_message(c.message.chat.id, "Что продать?", reply_markup=key)
                 users[c.message.chat.id]['class'] = users[c.message.chat.id]['c.data']
 
                 global ccllaass
@@ -1477,275 +1616,398 @@ def inline(c):
             users[c.message.chat.id]['subject'] = users[c.message.chat.id]['c.data']
             bot.send_message(c.message.chat.id, 'Отлично! Пришлите фотографию:' )
 
-        if buy_users[c.message.chat.id]['buynum'] in ['F','T','W']:
+# Мои объявления\показ объявлений:
+        if buy_users[c.message.chat.id]['buynum'] in ['F','T','W','Tw','Te','Fi','Wo']:
 
+            print(buy_users[c.message.chat.id]['buy_class'])
             counters[c.message.chat.id]['cou'] = 1
-            if buy_users[c.message.chat.id]['buy_class'] == "16":
+            if buy_users[c.message.chat.id]['buy_class'] == "17":
                 buy_users[c.message.chat.id]['buy_class_r'] = '7-Ф'
-            if buy_users[c.message.chat.id]['buy_class'] == "17":
+            if buy_users[c.message.chat.id]['buy_class'] == "18":
                 buy_users[c.message.chat.id]['buy_class_r'] = "7-М"
-            if buy_users[c.message.chat.id]['buy_class'] == "18":
+            if buy_users[c.message.chat.id]['buy_class'] == "19":
                 buy_users[c.message.chat.id]['buy_class_r'] = "7-ХБ"
-            if buy_users[c.message.chat.id]['buy_class'] == "19":
+            if buy_users[c.message.chat.id]['buy_class'] == "20":
                 buy_users[c.message.chat.id]['buy_class_r'] = "8-Ф"
-            if buy_users[c.message.chat.id]['buy_class'] == "20":
+            if buy_users[c.message.chat.id]['buy_class'] == "21":
                 buy_users[c.message.chat.id]['buy_class_r'] = "8-М"
-            if buy_users[c.message.chat.id]['buy_class'] == "21":
+            if buy_users[c.message.chat.id]['buy_class'] == "22":
                 buy_users[c.message.chat.id]['buy_class_r'] = "8-ХБ"
-            if buy_users[c.message.chat.id]['buy_class'] == "22":
+            if buy_users[c.message.chat.id]['buy_class'] == "23":
                 buy_users[c.message.chat.id]['buy_class_r'] = "9-Ф"
-            if buy_users[c.message.chat.id]['buy_class'] == "23":
-                buy_users[c.message.chat.id]['buy_class_r'] = "9-М"   
             if buy_users[c.message.chat.id]['buy_class'] == "24":
-                buy_users[c.message.chat.id]['buy_class_r'] = "9-ХБ"  
+                buy_users[c.message.chat.id]['buy_class_r'] = "9-М"
             if buy_users[c.message.chat.id]['buy_class'] == "25":
+                buy_users[c.message.chat.id]['buy_class_r'] = "9-ХБ"
+            if buy_users[c.message.chat.id]['buy_class'] == "26":
                 buy_users[c.message.chat.id]['buy_class_r'] = "10-Ф"
-            if buy_users[c.message.chat.id]['buy_class'] == "26":
+            if buy_users[c.message.chat.id]['buy_class'] == "27":
                 buy_users[c.message.chat.id]['buy_class_r'] = "10-М"
-            if buy_users[c.message.chat.id]['buy_class'] == "27":
+            if buy_users[c.message.chat.id]['buy_class'] == "28":
                 buy_users[c.message.chat.id]['buy_class_r'] = "10-ХБ"
-            if buy_users[c.message.chat.id]['buy_class'] == "28":
+            if buy_users[c.message.chat.id]['buy_class'] == "29":
                 buy_users[c.message.chat.id]['buy_class_r'] = "11-Ф"
-            if buy_users[c.message.chat.id]['buy_class'] == "29":
+            if buy_users[c.message.chat.id]['buy_class'] == "30":
                 buy_users[c.message.chat.id]['buy_class_r'] = "11-М"
-            if buy_users[c.message.chat.id]['buy_class'] == "30":
+            if buy_users[c.message.chat.id]['buy_class'] == "31":
                 buy_users[c.message.chat.id]['buy_class_r'] = "11-ХБ"
+            if buy_users[c.message.chat.id]['buy_class'] == "32":
+                buy_users[c.message.chat.id]['buy_class_r'] = "общее"
 
-            if buy_users[c.message.chat.id]['buy_class'] == "16":
-                buy_users[c.message.chat.id]['buy_class'] = '1'
             if buy_users[c.message.chat.id]['buy_class'] == "17":
-                buy_users[c.message.chat.id]['buy_class'] = "2"
+                buy_users[c.message.chat.id]['buy_class'] = '1'
             if buy_users[c.message.chat.id]['buy_class'] == "18":
-                buy_users[c.message.chat.id]['buy_class'] = "3"
+                buy_users[c.message.chat.id]['buy_class'] = "2"
             if buy_users[c.message.chat.id]['buy_class'] == "19":
-                buy_users[c.message.chat.id]['buy_class'] = "4"
+                buy_users[c.message.chat.id]['buy_class'] = "3"
             if buy_users[c.message.chat.id]['buy_class'] == "20":
-                buy_users[c.message.chat.id]['buy_class'] = "5"
+                buy_users[c.message.chat.id]['buy_class'] = "4"
             if buy_users[c.message.chat.id]['buy_class'] == "21":
-                buy_users[c.message.chat.id]['buy_class'] = "6"
+                buy_users[c.message.chat.id]['buy_class'] = "5"
             if buy_users[c.message.chat.id]['buy_class'] == "22":
-                buy_users[c.message.chat.id]['buy_class'] = "7"
+                buy_users[c.message.chat.id]['buy_class'] = "6"
             if buy_users[c.message.chat.id]['buy_class'] == "23":
-                buy_users[c.message.chat.id]['buy_class'] = "8"   
+                buy_users[c.message.chat.id]['buy_class'] = "7"
             if buy_users[c.message.chat.id]['buy_class'] == "24":
-                buy_users[c.message.chat.id]['buy_class'] = "9"  
+                buy_users[c.message.chat.id]['buy_class'] = "8"
             if buy_users[c.message.chat.id]['buy_class'] == "25":
-                buy_users[c.message.chat.id]['buy_class'] = "10"
+                buy_users[c.message.chat.id]['buy_class'] = "9"
             if buy_users[c.message.chat.id]['buy_class'] == "26":
-                buy_users[c.message.chat.id]['buy_class'] = "11"
+                buy_users[c.message.chat.id]['buy_class'] = "10"
             if buy_users[c.message.chat.id]['buy_class'] == "27":
-                buy_users[c.message.chat.id]['buy_class'] = "12"
+                buy_users[c.message.chat.id]['buy_class'] = "11"
             if buy_users[c.message.chat.id]['buy_class'] == "28":
-                buy_users[c.message.chat.id]['buy_class'] = "13"
+                buy_users[c.message.chat.id]['buy_class'] = "12"
             if buy_users[c.message.chat.id]['buy_class'] == "29":
-                buy_users[c.message.chat.id]['buy_class'] = "14"
+                buy_users[c.message.chat.id]['buy_class'] = "13"
             if buy_users[c.message.chat.id]['buy_class'] == "30":
+                buy_users[c.message.chat.id]['buy_class'] = "14"
+            if buy_users[c.message.chat.id]['buy_class'] == "31":
                 buy_users[c.message.chat.id]['buy_class'] = "15"
+            if buy_users[c.message.chat.id]['buy_class'] == "32":
+                buy_users[c.message.chat.id]['buy_class'] = "16"
 
-            if buy_users[c.message.chat.id]['buynum'] ==  'T':
-                qw = "SELECT * FROM `users` WHERE `subject` = '%s' and `class` = '%s' ORDER BY  `id` DESC LIMIT 10" %(buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])                     
+# Мои объявления:
+            if buy_users[c.message.chat.id]['buynum'] in ['Tw','Te','Fi','Wo']:
+                if buy_users[c.message.chat.id]['buynum'] ==  'Tw':
+                    qw = "SELECT * FROM `users` WHERE `user id` = '%s' and `subject` <> '' and `class` <> '' ORDER BY  `id` DESC LIMIT 20" %(c.message.chat.id)
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    ww[c.message.chat.id]['result'].reverse()
+                    if not ww[c.message.chat.id]['result']:
+                        counters[c.message.chat.id]['cou'] = 0
 
-                cursor.execute(qw)
-                ww[c.message.chat.id]['result'] = cursor.fetchall()
-                ww[c.message.chat.id]['result'].reverse()
-                if not ww[c.message.chat.id]['result']:
-                    counters[c.message.chat.id]['cou'] = 0           
+                if buy_users[c.message.chat.id]['buynum'] ==  'Te':
+                    qw = "SELECT * FROM `users` WHERE `user id` = '%s' and `subject` <> '' and `class` <> '' ORDER BY  `id` DESC LIMIT 10" %(c.message.chat.id)
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    ww[c.message.chat.id]['result'].reverse()
+                    if not ww[c.message.chat.id]['result']:
+                        counters[c.message.chat.id]['cou'] = 0
 
-            if buy_users[c.message.chat.id]['buynum'] ==  'F':
-                qw = "SELECT * FROM `users` WHERE `subject` = '%s' and `class` = '%s' ORDER BY  `id` DESC LIMIT 5" %(buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])                     
+                if buy_users[c.message.chat.id]['buynum'] ==  'Fi':
+                    qw = "SELECT * FROM `users` WHERE `user id` = '%s' and `subject` <> '' and `class` <> '' ORDER BY  `id` DESC LIMIT 5" %(c.message.chat.id)
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    ww[c.message.chat.id]['result'].reverse()
+                    if not ww[c.message.chat.id]['result']:
+                        counters[c.message.chat.id]['cou'] = 0
 
-                cursor.execute(qw)
-                ww[c.message.chat.id]['result'] = cursor.fetchall() 
-                ww[c.message.chat.id]['result'].reverse()
-                if not ww[c.message.chat.id]['result']:
-                    counters[c.message.chat.id]['cou'] = 0  
+                if buy_users[c.message.chat.id]['buynum'] ==  'Wo':
+                    qw = "SELECT * FROM `users` WHERE `user id` = '%s' and `subject` <> '' and `class` <> '' ORDER BY  `id` DESC LIMIT 2" %(c.message.chat.id)
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    ww[c.message.chat.id]['result'].reverse()
+                    if not ww[c.message.chat.id]['result']:
+                        counters[c.message.chat.id]['cou'] = 0
+                ww[c.message.chat.id]['row'] = ''
+                for ww[c.message.chat.id]['row'] in ww[c.message.chat.id]['result']:
 
-            if buy_users[c.message.chat.id]['buynum'] ==  'W':
-                qw = "SELECT * FROM `users` WHERE `subject` = '%s' and `class` = '%s' ORDER BY  `id` DESC LIMIT 2" %(buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])                     
-                cursor.execute(qw)
-                ww[c.message.chat.id]['result'] = cursor.fetchall()
-                ww[c.message.chat.id]['result'].reverse()
-                if not ww[c.message.chat.id]['result']:
-                    counters[c.message.chat.id]['cou'] = 0
-            ww[c.message.chat.id]['row'] = ''
-            for ww[c.message.chat.id]['row'] in ww[c.message.chat.id]['result']:
+                    qw = "SELECT `nickname` FROM `personal` WHERE `user id` = '%s'" %(c.message.chat.id)
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    print(ww[c.message.chat.id]['result'])
+                    num = len(ww[c.message.chat.id]['row'][6].split('\n'))
 
-                qw = "SELECT `user id` FROM `users` WHERE `id` = '%d' and `subject` = '%s' and `class` = '%s'" %(int(ww[c.message.chat.id]['row'][0]), buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class']) 
-                cursor.execute(qw)
-                ww[c.message.chat.id]['result'] = cursor.fetchall()
-                ww[c.message.chat.id]['result'].reverse()
-                ww[c.message.chat.id]['mod'] = int(ww[c.message.chat.id]['result'][0][0])
+                    if num%10 == 1 :
+                        pic = 'картинка.'
+                    if num%10 in [2,3,4] :
+                        pic = 'картинки.'
+                    if num%10 in [5,6,7,8,9,0] :
+                        pic = 'картинок.'
 
-                num = len(ww[c.message.chat.id]['row'][6].split('\n'))
+                    counters[c.message.chat.id]['call'] = str(ww[c.message.chat.id]['row'][0])
 
-                if num%10 == 1 :
-                    pic = 'картинка.'
-                if num%10 in [2,3,4] :
-                    pic = 'картинки.'
-                if num%10 in [5,6,7,8,9,0] :
-                    pic = 'картинок.'
+                    if ww[c.message.chat.id]['row'][2] == "r":
+                        users[c.message.chat.id]['subject_r'] = 'Русский'
+                    if ww[c.message.chat.id]['row'][2] == "z":
+                        users[c.message.chat.id]['subject_r'] = "Зарубежка"
+                    if ww[c.message.chat.id]['row'][2] == "a":
+                        users[c.message.chat.id]['subject_r'] = "Алгебра"
+                    if ww[c.message.chat.id]['row'][2] == "g":
+                        users[c.message.chat.id]['subject_r'] = "Геометрия"
+                    if ww[c.message.chat.id]['row'][2] == "an":
+                        users[c.message.chat.id]['subject_r'] = "Английский"
+                    if ww[c.message.chat.id]['row'][2] == "f":
+                        users[c.message.chat.id]['subject_r'] = "Физика"
+                    if ww[c.message.chat.id]['row'][2] == "b":
+                        users[c.message.chat.id]['subject_r'] = "Биология"
+                    if ww[c.message.chat.id]['row'][2] == "y":
+                        users[c.message.chat.id]['subject_r'] = "Укр.яз"
+                    if ww[c.message.chat.id]['row'][2] == "yk":
+                        users[c.message.chat.id]['subject_r'] = "Укр.лит"
+                    if ww[c.message.chat.id]['row'][2] == "h":
+                        users[c.message.chat.id]['subject_r'] = "Химия"
+                    if ww[c.message.chat.id]['row'][2] == "ge":
+                        users[c.message.chat.id]['subject_r'] = "География"
+                    if ww[c.message.chat.id]['row'][2] == "v":
+                        users[c.message.chat.id]['subject_r'] = "Всемирная история"
+                    if ww[c.message.chat.id]['row'][2] == "i":
+                        users[c.message.chat.id]['subject_r'] = "История Украины"
+                    if ww[c.message.chat.id]['row'][2] == "fi":
+                        users[c.message.chat.id]['subject_r'] = "Физкультура"
+                    if ww[c.message.chat.id]['row'][2] == "in":
+                        users[c.message.chat.id]['subject_r'] = "Информатика"
+                    if ww[c.message.chat.id]['row'][2] == "o":
+                        users[c.message.chat.id]['subject_r'] = "Основы здоровья"
+                    if ww[c.message.chat.id]['row'][2] == "p":
+                        users[c.message.chat.id]['subject_r'] = "Полезная инфа"
+                        
+                    print("-------" + buy_users[c.message.chat.id]['buy_class_r'])
 
-                counters[c.message.chat.id]['call'] = str(ww[c.message.chat.id]['row'][0])
+                    if ww[c.message.chat.id]['row'][5] == '':
+                        counters[c.message.chat.id]['buy_data'] = 1
+                        key = types.InlineKeyboardMarkup()
+                        b_1 = types.InlineKeyboardButton(text="⬆️удалить", callback_data = 'del' + str(ww[c.message.chat.id]['row'][0]))
+                        b_2 = types.InlineKeyboardButton(text="редактировать⬆️", callback_data = 'redact' + str(ww[c.message.chat.id]['row'][0]))
+                        key.add(b_1, b_2)
+                        bot.send_message(c.message.chat.id,"Продавец: " + txt(ww[c.message.chat.id]['result']) +
+                            "\n🔑Цена:   " + str(ww[c.message.chat.id]['row'][8]) + '🍆' +
+                            "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] +
+                            "\n🔝Класс:   " +  buy_users[c.message.chat.id]['buy_class_r'] +
+                            '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') +
+                            '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') +
+                            '\n+ ' + str(num) + ' ' + pic, reply_markup=key)
+                    else:
+                        counters[c.message.chat.id]['buy_data'] = 1
 
-                if ww[c.message.chat.id]['row'][2] == "r":
-                    users[c.message.chat.id]['subject_r'] = 'Русский'
-                if ww[c.message.chat.id]['row'][2] == "z":
-                    users[c.message.chat.id]['subject_r'] = "Зарубежка"
-                if ww[c.message.chat.id]['row'][2] == "a":
-                    users[c.message.chat.id]['subject_r'] = "Алгебра"
-                if ww[c.message.chat.id]['row'][2] == "g":
-                    users[c.message.chat.id]['subject_r'] = "Геометрия"
-                if ww[c.message.chat.id]['row'][2] == "an":
-                    users[c.message.chat.id]['subject_r'] = "Английский"
-                if ww[c.message.chat.id]['row'][2] == "f":
-                    users[c.message.chat.id]['subject_r'] = "Физика"
-                if ww[c.message.chat.id]['row'][2] == "b":
-                    users[c.message.chat.id]['subject_r'] = "Биология"
-                if ww[c.message.chat.id]['row'][2] == "y":
-                    users[c.message.chat.id]['subject_r'] = "Укр.яз"   
-                if ww[c.message.chat.id]['row'][2] == "yk":
-                    users[c.message.chat.id]['subject_r'] = "Укр.лит"  
-                if ww[c.message.chat.id]['row'][2] == "h":
-                    users[c.message.chat.id]['subject_r'] = "Химия"
-                if ww[c.message.chat.id]['row'][2] == "ge":
-                    users[c.message.chat.id]['subject_r'] = "География"
-                if ww[c.message.chat.id]['row'][2] == "v":
-                    users[c.message.chat.id]['subject_r'] = "Всемирная история"
-                if ww[c.message.chat.id]['row'][2] == "i":
-                    users[c.message.chat.id]['subject_r'] = "История Украины"
-                if ww[c.message.chat.id]['row'][2] == "fi":
-                    users[c.message.chat.id]['subject_r'] = "Физкультура"
-                if ww[c.message.chat.id]['row'][2] == "in":
-                    users[c.message.chat.id]['subject_r'] = "Информатика"
-                if ww[c.message.chat.id]['row'][2] == "o":
-                    users[c.message.chat.id]['subject_r'] = "Основы здоровья"
-                if ww[c.message.chat.id]['row'][2] == "p":
-                    users[c.message.chat.id]['subject_r'] = "Полезная инфа"
+                        key = types.InlineKeyboardMarkup()
+                        b_1 = types.InlineKeyboardButton(text="⬆️удалить",callback_data = 'del' + str(ww[c.message.chat.id]['row'][0]))
+                        b_2 = types.InlineKeyboardButton(text="редактировать⬆️",callback_data = 'redact' + str(ww[c.message.chat.id]['row'][0]))
+                        key.add(b_1, b_2)
+                        bot.send_message(c.message.chat.id, "Продавец: " + txt(ww[c.message.chat.id]['result']) +
+                            "\n🔑Цена:   " + str(ww[c.message.chat.id]['row'][8]) + '🍆' +
+                            "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] +
+                            "\n🔝Класс:   " +  buy_users[c.message.chat.id]['buy_class_r'] +
+                            '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') +
+                            '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') +
+                            '\n+ ' + str(num) + ' ' + pic +
+                            '\nP.S. ' + str(txt(str(ww[c.message.chat.id]['row'][5]))),
+                            reply_markup=key)
 
-                q = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s and `nickname` <> ''" %(ww[c.message.chat.id]['mod'])
-                cursor.execute(q)
-                ww[c.message.chat.id]['rabotay'] = cursor.fetchall()
+                ww[c.message.chat.id]['row'] = ''
+                buy_users[c.message.chat.id]['buynum'] = ''
 
-                if ww[c.message.chat.id]['row'][5] == '':
-                    counters[c.message.chat.id]['buy_data'] = 1
-                    key = types.InlineKeyboardMarkup()
-                    b_1 = types.InlineKeyboardButton(text="⬆️купить⬆️", callback_data = 'buy_button' + str(ww[c.message.chat.id]['row'][0]))
-                    key.add(b_1)
-                    bot.send_message(c.message.chat.id,"Продавец: " + txt(ww[c.message.chat.id]['rabotay']) +
-                        "\n🔑Цена:   " + str(ww[c.message.chat.id]['row'][8]) + '🍆' + 
-                        "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] + 
-                        "\n🔝Класс:   " +  buy_users[c.message.chat.id]['buy_class_r'] + 
-                        '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') + 
-                        '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') + 
-                        '\n+ ' + str(num) + ' ' + pic, reply_markup=key)
-                else:
-                    counters[c.message.chat.id]['buy_data'] = 1
+# Показ объявлений после выбора кольчества:
+            if buy_users[c.message.chat.id]['buynum'] in ['F','T','W']:
+                if buy_users[c.message.chat.id]['buynum'] ==  'T':
+                    qw = "SELECT * FROM `users` WHERE `subject` = '%s' and `class` = '%s' ORDER BY  `id` DESC LIMIT 10" %(buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])
 
-                    key = types.InlineKeyboardMarkup()
-                    b_1 = types.InlineKeyboardButton(text="⬆️купить⬆️",callback_data = 'buy_button' + str(ww[c.message.chat.id]['row'][0]))
-                    key.add(b_1)
-                    bot.send_message(c.message.chat.id, "Продавец: " + txt(ww[c.message.chat.id]['rabotay']) +
-                        "\n🔑Цена:   " + str(ww[c.message.chat.id]['row'][8]) + '🍆' + 
-                        "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] + 
-                        "\n🔝Класс:   " +  buy_users[c.message.chat.id]['buy_class_r'] + 
-                        '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') + 
-                        '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') + 
-                        '\n+ ' + str(num) + ' ' + pic + 
-                        '\nP.S. ' + str(txt(str(ww[c.message.chat.id]['row'][5]))),
-                        reply_markup=key)
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    ww[c.message.chat.id]['result'].reverse()
+                    if not ww[c.message.chat.id]['result']:
+                        counters[c.message.chat.id]['cou'] = 0
 
-            ww[c.message.chat.id]['row'] = ''
-            buy_users[c.message.chat.id]['buynum'] = ''
-            if counters[c.message.chat.id]['cou'] == 1:
-                if users[c.message.chat.id]['noname'] == 1:
-                    key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                    key.row("продать", "купить")
-                    key.row("пополнить счет", "регистрация", "баланс")
-                    bot.send_message(c.message.chat.id, "⬆️Результат поиска⬆️",reply_markup=key) 
-                if users[c.message.chat.id]['noname'] == 0:
-                    key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                    key.row("продать", "купить")
-                    key.row("пополнить счет", "баланс")
-                    bot.send_message(c.message.chat.id, "⬆️Результат поиска⬆️",reply_markup=key)
-            if counters[c.message.chat.id]['cou'] == 0:
-                if users[c.message.chat.id]['noname'] == 1:
-                    key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                    key.row("продать", "купить")
-                    key.row("пополнить счет", "регистрация", "баланс")
-                    bot.send_message(c.message.chat.id, "По вашему запросу ничего не найдено🙁",reply_markup=key) 
-                if users[c.message.chat.id]['noname'] == 0:
-                    key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-                    key.row("продать", "купить")
-                    key.row("пополнить счет", "баланс")
-                    bot.send_message(c.message.chat.id, "По вашему запросу ничего не найдено🙁",reply_markup=key)
-            counters[c.message.chat.id]['cou'] = 0
+                if buy_users[c.message.chat.id]['buynum'] ==  'F':
+                    qw = "SELECT * FROM `users` WHERE `subject` = '%s' and `class` = '%s' ORDER BY  `id` DESC LIMIT 5" %(buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])
+
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    ww[c.message.chat.id]['result'].reverse()
+                    if not ww[c.message.chat.id]['result']:
+                        counters[c.message.chat.id]['cou'] = 0
+
+                if buy_users[c.message.chat.id]['buynum'] ==  'W':
+                    qw = "SELECT * FROM `users` WHERE `subject` = '%s' and `class` = '%s' ORDER BY  `id` DESC LIMIT 2" %(buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    ww[c.message.chat.id]['result'].reverse()
+                    if not ww[c.message.chat.id]['result']:
+                        counters[c.message.chat.id]['cou'] = 0
+                ww[c.message.chat.id]['row'] = ''
+                for ww[c.message.chat.id]['row'] in ww[c.message.chat.id]['result']:
+
+                    qw = "SELECT `user id` FROM `users` WHERE `id` = '%d' and `subject` = '%s' and `class` = '%s'" %(int(ww[c.message.chat.id]['row'][0]), buy_users[c.message.chat.id]['buy_subject'], buy_users[c.message.chat.id]['buy_class'])
+                    cursor.execute(qw)
+                    ww[c.message.chat.id]['result'] = cursor.fetchall()
+                    ww[c.message.chat.id]['result'].reverse()
+                    ww[c.message.chat.id]['mod'] = int(ww[c.message.chat.id]['result'][0][0])
+
+                    num = len(ww[c.message.chat.id]['row'][6].split('\n'))
+
+                    if num%10 == 1 :
+                        pic = 'картинка.'
+                    if num%10 in [2,3,4] :
+                        pic = 'картинки.'
+                    if num%10 in [5,6,7,8,9,0] :
+                        pic = 'картинок.'
+
+                    counters[c.message.chat.id]['call'] = str(ww[c.message.chat.id]['row'][0])
+
+                    if ww[c.message.chat.id]['row'][2] == "r":
+                        users[c.message.chat.id]['subject_r'] = 'Русский'
+                    if ww[c.message.chat.id]['row'][2] == "z":
+                        users[c.message.chat.id]['subject_r'] = "Зарубежка"
+                    if ww[c.message.chat.id]['row'][2] == "a":
+                        users[c.message.chat.id]['subject_r'] = "Алгебра"
+                    if ww[c.message.chat.id]['row'][2] == "g":
+                        users[c.message.chat.id]['subject_r'] = "Геометрия"
+                    if ww[c.message.chat.id]['row'][2] == "an":
+                        users[c.message.chat.id]['subject_r'] = "Английский"
+                    if ww[c.message.chat.id]['row'][2] == "f":
+                        users[c.message.chat.id]['subject_r'] = "Физика"
+                    if ww[c.message.chat.id]['row'][2] == "b":
+                        users[c.message.chat.id]['subject_r'] = "Биология"
+                    if ww[c.message.chat.id]['row'][2] == "y":
+                        users[c.message.chat.id]['subject_r'] = "Укр.яз"
+                    if ww[c.message.chat.id]['row'][2] == "yk":
+                        users[c.message.chat.id]['subject_r'] = "Укр.лит"
+                    if ww[c.message.chat.id]['row'][2] == "h":
+                        users[c.message.chat.id]['subject_r'] = "Химия"
+                    if ww[c.message.chat.id]['row'][2] == "ge":
+                        users[c.message.chat.id]['subject_r'] = "География"
+                    if ww[c.message.chat.id]['row'][2] == "v":
+                        users[c.message.chat.id]['subject_r'] = "Всемирная история"
+                    if ww[c.message.chat.id]['row'][2] == "i":
+                        users[c.message.chat.id]['subject_r'] = "История Украины"
+                    if ww[c.message.chat.id]['row'][2] == "fi":
+                        users[c.message.chat.id]['subject_r'] = "Физкультура"
+                    if ww[c.message.chat.id]['row'][2] == "in":
+                        users[c.message.chat.id]['subject_r'] = "Информатика"
+                    if ww[c.message.chat.id]['row'][2] == "o":
+                        users[c.message.chat.id]['subject_r'] = "Основы здоровья"
+                    if ww[c.message.chat.id]['row'][2] == "p":
+                        users[c.message.chat.id]['subject_r'] = "Полезная инфа"
+
+                    q = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s and `nickname` <> ''" %(ww[c.message.chat.id]['mod'])
+                    cursor.execute(q)
+                    ww[c.message.chat.id]['rabotay'] = cursor.fetchall()
+
+                    if ww[c.message.chat.id]['row'][5] == '':
+                        counters[c.message.chat.id]['buy_data'] = 1
+                        key = types.InlineKeyboardMarkup()
+                        b_1 = types.InlineKeyboardButton(text="⬆️купить⬆️", callback_data = 'buy_button' + str(ww[c.message.chat.id]['row'][0]))
+                        key.add(b_1)
+                        bot.send_message(c.message.chat.id,"Продавец: " + txt(ww[c.message.chat.id]['rabotay']) +
+                            "\n🔑Цена:   " + str(ww[c.message.chat.id]['row'][8]) + '🍆' +
+                            "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] +
+                            "\n🔝Класс:   " +  buy_users[c.message.chat.id]['buy_class_r'] +
+                            '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') +
+                            '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') +
+                            '\n+ ' + str(num) + ' ' + pic, reply_markup=key)
+                    else:
+                        counters[c.message.chat.id]['buy_data'] = 1
+
+                        key = types.InlineKeyboardMarkup()
+                        b_1 = types.InlineKeyboardButton(text="⬆️купить⬆️",callback_data = 'buy_button' + str(ww[c.message.chat.id]['row'][0]))
+                        key.add(b_1)
+                        bot.send_message(c.message.chat.id, "Продавец: " + txt(ww[c.message.chat.id]['rabotay']) +
+                            "\n🔑Цена:   " + str(ww[c.message.chat.id]['row'][8]) + '🍆' +
+                            "\n🔥Предмет:   " + users[c.message.chat.id]['subject_r'] +
+                            "\n🔝Класс:   " +  buy_users[c.message.chat.id]['buy_class_r'] +
+                            '\n📅Дата:  ' + ww[c.message.chat.id]['row'][4].strftime('%Y-%m-%d') +
+                            '\n🕑Время:   ' + ww[c.message.chat.id]['row'][4].strftime('%H : %M') +
+                            '\n+ ' + str(num) + ' ' + pic +
+                            '\nP.S. ' + str(txt(str(ww[c.message.chat.id]['row'][5]))),
+                            reply_markup=key)
+
+                ww[c.message.chat.id]['row'] = ''
+                buy_users[c.message.chat.id]['buynum'] = ''
+                if counters[c.message.chat.id]['cou'] == 1:
+                    if users[c.message.chat.id]['noname'] == 1:
+                        key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+                        key.row("продать", "купить")
+                        key.row("пополнить счет", "регистрация", "баланс")
+                        bot.send_message(c.message.chat.id, "⬆️Результат поиска⬆️",reply_markup=key)
+                    if users[c.message.chat.id]['noname'] == 0:
+                        key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+                        key.row("продать", "мои объявления", "купить")
+                        key.row("пополнить счет", "баланс")
+                        bot.send_message(c.message.chat.id, "⬆️Результат поиска⬆️",reply_markup=key)
+                if counters[c.message.chat.id]['cou'] == 0:
+                    if users[c.message.chat.id]['noname'] == 1:
+                        key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+                        key.row("продать", "купить")
+                        key.row("пополнить счет", "регистрация", "баланс")
+                        bot.send_message(c.message.chat.id, "По вашему запросу ничего не найдено🙁",reply_markup=key)
+                    if users[c.message.chat.id]['noname'] == 0:
+                        key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+                        key.row("продать", "мои объявления", "купить")
+                        key.row("пополнить счет", "баланс")
+                        bot.send_message(c.message.chat.id, "По вашему запросу ничего не найдено🙁",reply_markup=key)
+                counters[c.message.chat.id]['cou'] = 0
     else:
-        bot.send_photo(message.chat.id, open('D:\Дима\Програмирование\Python\BOT\Фото\Angrybot.jpg', 'rb'))
+        bot.send_photo(message.chat.id, open('//home//my_project//photos//Angrybot.jpg', 'rb'))
         bot.send_message(c.message.chat.id, 'Вы забанены! По всем вопросам —> @RL_support_Bot')
 
 @bot.message_handler(content_types=['photo'])
 def handle_docs_photo(message):
 
-
     if message.chat.id not in users.keys() or message.chat.id not in buy_users.keys() or message.chat.id not in ww.keys() or message.chat.id not in counters.keys():
-        
+
         qw = "SELECT distinct `nickname` FROM `users` WHERE `user id` = %s and `nickname` <> ''" %(message.chat.id)
         cursor.execute(qw)
         result = cursor.fetchall()
         result = txt(result)
-        
+
         if len(result) != 0:
             users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '','class_r':'', 'c.data': 0, 'nickname': result[0], 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
             buy_users[message.chat.id] = {'buy_class_r': '', 'buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-            counters[message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+            counters[message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
             ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
         else:
             users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject_r': '','class_r':'', 'c.data': 0, 'nickname': '', 'nicou': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': 0, 'noname': ''}
             buy_users[message.chat.id] = {'buy_class_r': '','buy_subject': '', 'buy_class': '', 'buy_data': '', 'buynum': '', 'buy_file': []}
-            counters[message.chat.id] = {'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
+            counters[message.chat.id] = {'count_4': 0, 'count_3': 0, 'cou': 0, 'count_2': 0, 'count': 0, 'call': '', 'ids': '', 'idz': '', 'csc': 0, 'bd': 0, 'buy_data': 0, 'uou': 0, 'uqu': 0, 'f': 0, 'zwz': 0, 'coc': 0, 'cec': 0,'cac': 0, 'czc': 0, 'cjc': 0}
             ww[message.chat.id] = {'result': '', 'row': '', 'b': 0, 'assessment': '', 'cou': 1, 'N': 0, 'rating': 0.0}
-
 
     a = random.randint(0, 5)
 
     if message.chat.id not in users.keys():
-        users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': ''} 
-        
+        users[message.chat.id] = {'chat': 0, 'free': 0, 'ban': 0, 'subject': '', 'class': '', 'date': '', 'note': '', 'file': [], 'price': ''}
+
     if users[message.chat.id]['class'] == '' and users[message.chat.id]['subject'] == '' and a == 0:
         bot.send_message(message.chat.id, "И что мне с этим делать? Нажми кнопку <продать> выбери все необходимое, а после шли фотки.")
     if users[message.chat.id]['class'] == '' and users[message.chat.id]['subject'] == '' and a == 1:
-        bot.send_message(message.chat.id, "Прикольная картинка. Но что мне с ней делать? Нажми кнопку <продать> выбери все необходимое, а после шли фотки.")  
+        bot.send_message(message.chat.id, "Прикольная картинка. Но что мне с ней делать? Нажми кнопку <продать> выбери все необходимое, а после шли фотки.")
     if users[message.chat.id]['class'] == '' and users[message.chat.id]['subject'] == '' and a == 2:
         bot.send_message(message.chat.id, "😂👌 И что мне с этим делать? Нажми кнопку <продать> выбери все необходимое, а после шли фотки.")
     if users[message.chat.id]['class'] == '' and users[message.chat.id]['subject'] == '' and a == 3:
         bot.send_message(message.chat.id, "Это шедевр!!! Но что мне с этим делать? Нажми кнопку <продать> выбери все необходимое, а после шли фотки.")
     if users[message.chat.id]['class'] == '' and users[message.chat.id]['subject'] == '' and a == 4:
-        bot.send_message(message.chat.id, "Это конечно красиво, но что мне с этим делать? Нажми кнопку <продать> выбери все необходимое, а после шли фотки.")  
+        bot.send_message(message.chat.id, "Это конечно красиво, но что мне с этим делать? Нажми кнопку <продать> выбери все необходимое, а после шли фотки.")
     if users[message.chat.id]['class'] == '' and users[message.chat.id]['subject'] == '' and a == 5:
         bot.send_message(message.chat.id, "Так, хватит прикаловаться! Нажми кнопку <продать> выбери все необходимое, а после шли фотки.")
-    
+
     if users[message.chat.id]['class'] != '' and users[message.chat.id]['subject'] != '':
         cur = datetime.datetime.now()
-        a = datetime.timedelta(hours=6)
+        a = datetime.timedelta(hours=7)
         cur += a
-        file_name = "D://TEMP//ФОТОГРАФИИ Telegram BOT//" + cur.strftime('%Y-%m-%d-%H-%M-%S-%f') + '.jpg'
+        file_name = cur.strftime('%Y-%m-%d-%H-%M-%S-%f') + '.jpg'
         try:
             file_info = bot.get_file(message.photo[len(message.photo)-1].file_id)
             downloaded_file = bot.download_file(file_info.file_path)
             with open(file_name, 'wb') as new_file:
                 new_file.write(downloaded_file)
-            bot.reply_to(message,"Фото успешно добавлено!") 
+            bot.reply_to(message,"Фото успешно добавлено!")
         except Exception as e:
             bot.reply_to(message, e)
-
         users[message.chat.id]['date'] = cur
         users[message.chat.id]['file'].append(file_name)
-        
 
-        key = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        key.row('готово','добавить коментарий', 'отмена')
+        key = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
+        key.row('готово','добавить описание', 'отмена')
         bot.send_message(message.chat.id, "Если хотите, добавте еще фотографии.",reply_markup=key)
 
 bot.polling(none_stop=True)
-
-######################################################
